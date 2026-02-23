@@ -4,3 +4,4 @@ dist/
 .nuxt/
 .output/
 *.tsbuildinfo
+apps/backend/generated/
