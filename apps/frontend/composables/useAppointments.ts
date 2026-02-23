@@ -2,6 +2,7 @@ export interface DayAvailability {
   date: string
   available: boolean
   bookedBy?: string
+  isPending?: boolean
   isBenjThursday?: boolean
   isWeekend?: boolean
 }
@@ -61,5 +62,11 @@ export const useAppointments = () => {
       headers: { 'x-admin-password': adminPassword },
     })
 
-  return { getAvailability, createAppointment, getByToken, getByEmail, getWeek, updateStatus }
+  const deleteAppointment = (id: string, adminPassword: string) =>
+    $fetch(`${API}/appointments/admin/${id}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-password': adminPassword },
+    })
+
+  return { getAvailability, createAppointment, getByToken, getByEmail, getWeek, updateStatus, deleteAppointment }
 }

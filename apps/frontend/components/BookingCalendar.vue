@@ -43,8 +43,8 @@
         <!-- Nom du réservant -->
         <span
           v-if="day.bookedBy"
-          class="absolute bottom-1 left-0 right-0 text-[10px] font-semibold text-center truncate px-1 leading-tight"
-          :class="day.isBenjThursday ? 'text-amber-100' : 'text-zinc-500'"
+          class="absolute bottom-1 left-0 right-0 text-[10px] md:text-sm font-semibold text-center truncate px-1 leading-tight"
+          :class="day.isBenjThursday ? 'text-amber-100' : day.isPending ? 'text-zinc-400 italic' : 'text-zinc-500'"
         >
           {{ day.bookedBy }}
         </span>
@@ -109,6 +109,7 @@ const daysInMonth = computed(() => {
       isPast: isBefore(day, today),
       isToday: isToday(day),
       bookedBy: avail?.bookedBy,
+      isPending: avail?.isPending ?? false,
       isBenjThursday: avail?.isBenjThursday ?? false,
       isWeekend: avail?.isWeekend ?? false,
     }
@@ -118,6 +119,9 @@ const daysInMonth = computed(() => {
 function cellClass(day: ReturnType<typeof daysInMonth.value[0]['valueOf']>) {
   if (day.isBenjThursday) {
     return 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white cursor-not-allowed ring-2 ring-amber-300 ring-offset-1 shadow-sm shadow-amber-200'
+  }
+  if (day.isPending) {
+    return 'bg-zinc-100 text-zinc-400 cursor-not-allowed border-2 border-dashed border-zinc-300'
   }
   if (day.isPast || (!day.available && !day.isBenjThursday)) {
     return 'bg-zinc-100 text-zinc-400 cursor-not-allowed'

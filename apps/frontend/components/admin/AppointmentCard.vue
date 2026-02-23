@@ -34,7 +34,7 @@
         {{ statusLabel }}
       </div>
 
-      <!-- Actions (uniquement si EN ATTENTE) -->
+      <!-- Actions si EN ATTENTE -->
       <template v-if="appointment.status === 'PENDING'">
         <UButton
           icon="i-heroicons-check"
@@ -55,6 +55,19 @@
           @click="handleCancel"
         />
       </template>
+
+      <!-- Supprimer si CONFIRMÉ -->
+      <template v-if="appointment.status === 'CONFIRMED'">
+        <UButton
+          icon="i-heroicons-trash"
+          color="red"
+          variant="soft"
+          size="xs"
+          :loading="loadingDelete"
+          class="cursor-pointer"
+          @click="handleDelete"
+        />
+      </template>
     </div>
   </div>
 </template>
@@ -68,10 +81,12 @@ const props = defineProps<{ appointment: Appointment }>()
 const emit = defineEmits<{
   confirm: [id: string]
   cancel: [id: string]
+  delete: [id: string]
 }>()
 
 const loadingConfirm = ref(false)
 const loadingCancel = ref(false)
+const loadingDelete = ref(false)
 
 const avatarGradient = computed(() => ({
   PENDING: 'bg-gradient-to-br from-amber-400 to-orange-500',
@@ -109,5 +124,10 @@ function handleConfirm() {
 function handleCancel() {
   loadingCancel.value = true
   emit('cancel', props.appointment.id)
+}
+
+function handleDelete() {
+  loadingDelete.value = true
+  emit('delete', props.appointment.id)
 }
 </script>

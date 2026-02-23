@@ -1,6 +1,11 @@
 <template>
   <div class="min-h-screen">
 
+    <!-- Logo top-left -->
+    <div class="fixed top-4 left-4 z-20">
+      <img src="/faveicon.png" alt="logo" class="w-16 h-16 object-contain cursor-pointer" @click="goHome" />
+    </div>
+
     <!-- Nav top-right -->
     <div class="fixed top-4 right-4 z-20 flex flex-col md:flex-row items-center gap-2">
       <NuxtLink to="/realisations" class="w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-1.5 flex items-center justify-center gap-2 bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors rounded-full">
@@ -16,7 +21,7 @@
       </NuxtLink>
     </div>
 
-    <div class="max-w-4xl mx-auto py-12 px-2 md:px-4">
+    <div class="max-w-4xl md:max-w-6xl mx-auto py-12 px-2 md:px-4">
 
       <!-- Header -->
       <div class="text-center mb-10">
@@ -26,9 +31,12 @@
           <span class="w-px h-3 bg-zinc-200" />
           <span class="text-xs font-mono font-semibold text-indigo-600">10 €</span>
         </div>
-        <h1 class="text-5xl font-bold tracking-tight text-zinc-900 mb-1">
-          Nm.D.<span class="text-red-600">Barber</span>
-        </h1>
+        <div class="flex flex-col-reverse md:flex-row items-center justify-center gap-3 mb-1">
+          <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-900">
+            Nm.D.<span class="text-red-600">Barber</span>
+          </h1>
+          <img src="/faveicon.png" alt="logo" class="w-24 h-24 object-contain" />
+        </div>
         <p class="text-zinc-500 text-base mt-3">Choisis ton créneau mec, tqt je te rend bg.</p>
       </div>
 
@@ -148,6 +156,11 @@ function onDateSelected(date: string) {
 function onSuccess() {
   selectedDate.value = null
   success.value = true
+}
+
+function goHome() {
+  selectedDate.value = null
+  success.value = false
 }
 </script>
 

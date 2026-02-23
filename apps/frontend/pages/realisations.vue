@@ -3,10 +3,9 @@
 
     <!-- Nav -->
     <div class="fixed top-4 left-4 right-4 z-20 flex items-center justify-between">
-      <UButton to="/" icon="i-heroicons-arrow-left" size="sm" color="gray"
-        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium">
-        Retour
-      </UButton>
+      <NuxtLink to="/">
+        <img src="/faveicon.png" alt="logo" class="w-12 h-12 object-contain cursor-pointer" />
+      </NuxtLink>
       <div class="bg-zinc-900 border border-zinc-700 rounded-full px-4 py-1.5">
         <span class="text-xs font-mono text-zinc-300 tracking-wider uppercase">Nm.D.Barber</span>
       </div>

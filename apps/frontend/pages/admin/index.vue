@@ -121,6 +121,7 @@
           :appointment="appt"
           @confirm="confirmAppt"
           @cancel="cancelAppt"
+          @delete="deleteAppt"
         />
       </div>
 
@@ -134,7 +135,7 @@ import { fr } from 'date-fns/locale'
 
 definePageMeta({ middleware: 'auth-admin' })
 
-const { getWeek, updateStatus } = useAppointments()
+const { getWeek, updateStatus, deleteAppointment } = useAppointments()
 const adminPassword = useCookie('admin_password')
 
 const currentWeek = ref(new Date())
@@ -167,6 +168,11 @@ async function confirmAppt(id: string) {
 
 async function cancelAppt(id: string) {
   await updateStatus(id, 'CANCELLED', adminPassword.value!)
+  await loadWeek()
+}
+
+async function deleteAppt(id: string) {
+  await deleteAppointment(id, adminPassword.value!)
   await loadWeek()
 }
 

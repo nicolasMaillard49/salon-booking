@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Body, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
@@ -46,5 +46,11 @@ export class AppointmentsController {
   @Patch('admin/:id/status')
   updateStatus(@Param('id') id: string, @Body() dto: UpdateStatusDto) {
     return this.service.updateStatus(id, dto);
+  }
+
+  @UseGuards(AdminGuard)
+  @Delete('admin/:id')
+  delete(@Param('id') id: string) {
+    return this.service.delete(id);
   }
 }

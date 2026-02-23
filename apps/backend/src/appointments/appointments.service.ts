@@ -33,7 +33,7 @@ export class AppointmentsService {
         date: { gte: from, lte: to },
         status: { not: 'CANCELLED' },
       },
-      select: { date: true, firstName: true, lastName: true },
+      select: { date: true, firstName: true, lastName: true, status: true },
     });
 
     const allDays = eachDayOfInterval({ start: from, end: to });
@@ -58,6 +58,7 @@ export class AppointmentsService {
         date: dateStr,
         available: !booking,
         bookedBy: booking ? `${booking.firstName} ${booking.lastName[0]}.` : undefined,
+        isPending: booking ? booking.status === 'PENDING' : false,
         isBenjThursday: false,
         isWeekend,
       };
@@ -81,6 +82,11 @@ export class AppointmentsService {
     if (existing) {
       throw new ConflictException('Ce créneau est déjà réservé.');
     }
+
+    // Libère le créneau si un RDV annulé occupe encore la date (contrainte unique)
+    await this.prisma.appointment.deleteMany({
+      where: { date, status: 'CANCELLED' },
+    });
 
     const appointment = await this.prisma.appointment.create({
       data: {
@@ -161,5 +167,15 @@ export class AppointmentsService {
     await this.mail.sendStatusUpdate(updated);
 
     return updated;
+  }
+
+  async delete(id: string) {
+    const appointment = await this.prisma.appointment.findUnique({ where: { id } });
+
+    if (!appointment) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    await this.prisma.appointment.delete({ where: { id } });
   }
 }
