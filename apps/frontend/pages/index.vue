@@ -2,32 +2,18 @@
   <div class="min-h-screen">
 
     <!-- Nav top-right -->
-    <div class="fixed top-4 right-4 z-20 flex items-center gap-2">
-      <UButton
-        to="/realisations"
-        icon="i-heroicons-photo"
-        size="sm"
-        color="gray"
-        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium"
+    <div class="fixed top-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2">
+      <!-- Mobile : icônes seules verticales -->
+      <NuxtLink
+        v-for="btn in navButtons"
+        :key="btn.to"
+        :to="btn.to"
+        class="flex items-center gap-2 bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors cursor-pointer rounded-full"
+        :class="btn.label ? 'md:px-3 md:py-1.5 px-0 w-9 h-9 md:w-auto md:h-auto justify-center' : 'w-9 h-9 justify-center'"
       >
-        Réalisations
-      </UButton>
-      <UButton
-        to="/mes-rdv"
-        icon="i-heroicons-calendar-days"
-        size="sm"
-        color="gray"
-        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium"
-      >
-        Mes RDV
-      </UButton>
-      <UButton
-        to="/admin"
-        icon="i-heroicons-lock-closed"
-        size="sm"
-        color="gray"
-        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer"
-      />
+        <UIcon :name="btn.icon" class="w-4 h-4 shrink-0" />
+        <span v-if="btn.label" class="hidden md:inline text-sm font-medium">{{ btn.label }}</span>
+      </NuxtLink>
     </div>
 
     <div class="max-w-4xl mx-auto py-12 px-4">
@@ -144,6 +130,12 @@
 <script setup lang="ts">
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
+const navButtons = [
+  { to: '/realisations', icon: 'i-heroicons-photo', label: 'Réalisations' },
+  { to: '/mes-rdv', icon: 'i-heroicons-calendar-days', label: 'Mes RDV' },
+  { to: '/admin', icon: 'i-heroicons-lock-closed', label: '' },
+]
 
 const selectedDate = ref<string | null>(null)
 const success = ref(false)
