@@ -44,7 +44,14 @@
     </div>
 
     <!-- Grille des jours -->
-    <div v-else class="grid grid-cols-7 gap-2 mt-3">
+    <div v-else class="relative">
+      <!-- Bande semaine en cours -->
+      <div
+        v-if="currentWeekRow >= 0"
+        class="absolute -left-2 -right-2 rounded-xl bg-indigo-50 border border-indigo-200 pointer-events-none z-0"
+        :style="{ top: `${12 + currentWeekRow * 72}px`, height: '64px' }"
+      />
+      <div class="grid grid-cols-7 gap-2 mt-3 relative z-10">
       <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-16" />
 
       <button
@@ -76,6 +83,7 @@
           :class="day.available && !day.isPast ? 'bg-white/50' : 'bg-zinc-300'"
         />
       </button>
+    </div>
     </div>
 
     <!-- Légende -->
@@ -113,6 +121,13 @@ const availability = ref<DayAvailability[]>([])
 const loading = ref(false)
 
 const weekDays = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM']
+
+const currentWeekRow = computed(() => {
+  const todayStr = format(today, 'yyyy-MM-dd')
+  const todayIdx = daysInMonth.value.findIndex(d => d.date === todayStr)
+  if (todayIdx === -1) return -1
+  return Math.floor((firstDayOffset.value + todayIdx) / 7)
+})
 
 const currentMonthLabel = computed(() =>
   format(currentDate.value, 'MMMM yyyy', { locale: fr })
