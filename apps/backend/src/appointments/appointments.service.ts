@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -95,6 +95,23 @@ export class AppointmentsService {
     await this.mail.sendCreatedToAdmin(appointment);
 
     return appointment;
+  }
+
+  async findByEmail(email: string) {
+    if (!email) throw new BadRequestException('Email requis.');
+    return this.prisma.appointment.findMany({
+      where: { email },
+      orderBy: { date: 'desc' },
+      select: {
+        id: true,
+        date: true,
+        firstName: true,
+        lastName: true,
+        status: true,
+        magicToken: true,
+        createdAt: true,
+      },
+    });
   }
 
   async findByToken(magicToken: string) {

@@ -29,6 +29,11 @@ export class AppointmentsController {
     return this.service.findByToken(token);
   }
 
+  @Get('my')
+  findByEmail(@Query('email') email: string) {
+    return this.service.findByEmail(email);
+  }
+
   // --- Routes admin (protégées) ---
 
   @UseGuards(AdminGuard)

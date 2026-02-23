@@ -44,6 +44,11 @@ export const useAppointments = () => {
   const getByToken = (token: string) =>
     $fetch<Appointment>(`${API}/appointments/status/${token}`)
 
+  const getByEmail = (email: string) =>
+    $fetch<Pick<Appointment, 'id' | 'date' | 'firstName' | 'lastName' | 'status' | 'magicToken' | 'createdAt'>[]>(
+      `${API}/appointments/my?email=${encodeURIComponent(email)}`
+    )
+
   const getWeek = (week: string, adminPassword: string) =>
     $fetch<WeekData>(`${API}/appointments/admin?week=${week}`, {
       headers: { 'x-admin-password': adminPassword },
@@ -56,5 +61,5 @@ export const useAppointments = () => {
       headers: { 'x-admin-password': adminPassword },
     })
 
-  return { getAvailability, createAppointment, getByToken, getWeek, updateStatus }
+  return { getAvailability, createAppointment, getByToken, getByEmail, getWeek, updateStatus }
 }

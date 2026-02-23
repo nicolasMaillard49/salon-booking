@@ -39,12 +39,12 @@
     </div>
 
     <!-- Loading skeleton -->
-    <div v-if="loading" class="grid grid-cols-7 gap-1.5 mt-3">
+    <div v-if="loading" class="grid grid-cols-7 gap-2 mt-3">
       <div v-for="n in 35" :key="n" class="h-16 rounded-lg bg-zinc-100 animate-pulse" />
     </div>
 
     <!-- Grille des jours -->
-    <div v-else class="grid grid-cols-7 gap-1.5 mt-3">
+    <div v-else class="grid grid-cols-7 gap-2 mt-3">
       <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-16" />
 
       <button

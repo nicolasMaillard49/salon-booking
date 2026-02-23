@@ -1,6 +1,29 @@
 <template>
   <div class="min-h-screen">
-    <div class="max-w-3xl mx-auto py-12 px-4">
+
+    <!-- Nav top-right -->
+    <div class="fixed top-4 right-4 z-20 flex items-center gap-2">
+      <UButton
+        to="/mes-rdv"
+        icon="i-heroicons-calendar-days"
+        variant="ghost"
+        color="gray"
+        size="sm"
+        class="bg-white/80 backdrop-blur border border-zinc-200 cursor-pointer"
+      >
+        Mes RDV
+      </UButton>
+      <UButton
+        to="/admin"
+        icon="i-heroicons-lock-closed"
+        variant="ghost"
+        color="gray"
+        size="sm"
+        class="bg-white/80 backdrop-blur border border-zinc-200 cursor-pointer"
+      />
+    </div>
+
+    <div class="max-w-4xl mx-auto py-12 px-4">
 
       <!-- Header -->
       <div class="text-center mb-10">
@@ -11,9 +34,9 @@
           <span class="text-xs font-mono font-semibold text-indigo-600">10 €</span>
         </div>
         <h1 class="text-5xl font-bold tracking-tight text-zinc-900 mb-1">
-          Nm.D.<span class="text-indigo-600">Barber</span>
+          Nm.D.<span class="text-red-600">Barber</span>
         </h1>
-        <p class="text-zinc-500 text-base mt-3">Choisissez votre créneau, on s'occupe du reste.</p>
+        <p class="text-zinc-500 text-base mt-3">Choisis ton créneau mec, tqt je te rend bg.</p>
       </div>
 
       <!-- Indicateur d'étape -->
