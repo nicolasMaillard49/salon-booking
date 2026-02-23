@@ -51,7 +51,7 @@
         v-for="day in daysInMonth"
         :key="day.date"
         :disabled="!day.available || day.isPast"
-        class="h-16 rounded-lg text-sm transition-all duration-200 relative flex flex-col items-center justify-center gap-0.5 overflow-hidden"
+        class="h-16 rounded-lg text-sm transition-all duration-200 relative flex flex-col items-center justify-center gap-0.5 overflow-hidden hover:scale-110 hover:z-10"
         :class="cellClass(day)"
         @click="day.available && !day.isPast && emit('select', day.date)"
       >
