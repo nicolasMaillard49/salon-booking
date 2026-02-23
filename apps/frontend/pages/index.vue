@@ -16,7 +16,7 @@
       </NuxtLink>
     </div>
 
-    <div class="max-w-4xl mx-auto py-12 px-4">
+    <div class="max-w-4xl mx-auto py-12 px-2 md:px-4">
 
       <!-- Header -->
       <div class="text-center mb-10">
@@ -91,7 +91,7 @@
               <span class="text-[10px] md:text-xs font-mono font-semibold text-indigo-700 whitespace-nowrap">10 €</span>
             </div>
           </div>
-          <div class="p-6">
+          <div class="p-2 md:p-6">
             <BookingCalendar @select="onDateSelected" />
           </div>
         </div>

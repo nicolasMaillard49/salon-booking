@@ -1,78 +1,41 @@
 <template>
   <div class="w-full">
+
     <!-- Navigation mois -->
-    <div class="flex items-center justify-between mb-6">
-      <UButton
-        icon="i-heroicons-chevron-left"
-        variant="ghost"
-        color="gray"
-        size="sm"
-        :disabled="loading"
-        class="cursor-pointer"
-        @click="prevMonth"
-      />
-      <div class="text-center">
-        <p class="text-lg font-semibold tracking-tight text-zinc-900 capitalize">
-          {{ currentMonthLabel }}
-        </p>
-      </div>
-      <UButton
-        icon="i-heroicons-chevron-right"
-        variant="ghost"
-        color="gray"
-        size="sm"
-        :disabled="loading"
-        class="cursor-pointer"
-        @click="nextMonth"
-      />
+    <div class="flex items-center justify-between mb-4">
+      <UButton icon="i-heroicons-chevron-left" variant="ghost" color="gray" size="sm" :disabled="loading" class="cursor-pointer" @click="prevMonth" />
+      <p class="text-base font-semibold tracking-tight text-zinc-900 capitalize">{{ currentMonthLabel }}</p>
+      <UButton icon="i-heroicons-chevron-right" variant="ghost" color="gray" size="sm" :disabled="loading" class="cursor-pointer" @click="nextMonth" />
     </div>
 
     <!-- En-têtes jours -->
-    <div class="grid grid-cols-7 mb-2 border-b border-zinc-100 pb-2">
-      <div
-        v-for="d in weekDays"
-        :key="d"
-        class="text-center text-xs font-mono text-zinc-400 tracking-widest uppercase py-1"
-      >
+    <div class="grid grid-cols-7 gap-1 mb-1">
+      <div v-for="d in weekDays" :key="d" class="text-center text-[10px] font-mono text-zinc-400 tracking-widest uppercase py-1">
         {{ d }}
       </div>
     </div>
 
     <!-- Loading skeleton -->
-    <div v-if="loading" class="grid grid-cols-7 gap-2 mt-3">
+    <div v-if="loading" class="grid grid-cols-7 gap-1">
       <div v-for="n in 35" :key="n" class="h-16 rounded-lg bg-zinc-100 animate-pulse" />
     </div>
 
-    <!-- Grille des jours -->
-    <div v-else class="grid grid-cols-7 gap-2 mt-3">
+    <!-- Grille -->
+    <div v-else class="grid grid-cols-7 gap-1">
       <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-16" />
 
       <button
         v-for="day in daysInMonth"
         :key="day.date"
         :disabled="!day.available || day.isPast"
-        class="h-16 rounded-lg text-sm transition-all duration-200 relative flex flex-col items-center justify-center gap-0.5 overflow-hidden hover:scale-110 hover:z-10"
+        class="h-16 rounded-lg transition-all duration-150 relative flex flex-col items-start justify-start p-1.5 hover:scale-110 hover:z-10 overflow-hidden"
         :class="cellClass(day)"
         @click="day.available && !day.isPast && emit('select', day.date)"
       >
-        <!-- Badge semaine en cours -->
-        <span
-          v-if="day.isCurrentWeek"
-          class="absolute top-1 left-1/2 -translate-x-1/2 text-[7px] font-mono font-bold leading-none px-1.5 py-0.5 rounded-full whitespace-nowrap"
-          :class="(day.available && !day.isPast) || day.isBenjThursday
-            ? 'bg-white/25 text-white'
-            : 'bg-indigo-100 text-indigo-500'"
-        >
-          cette sem.
-        </span>
-
         <!-- Numéro du jour -->
         <span
-          class="font-mono font-semibold leading-none"
-          :class="[
-            day.isBenjThursday ? 'text-base' : 'text-sm',
-            day.isCurrentWeek ? 'mt-2' : ''
-          ]"
+          class="text-[11px] font-mono font-bold leading-none"
+          :class="day.isToday ? (day.available ? 'text-red-300' : 'text-red-500') : ''"
         >
           {{ day.dayNumber }}
         </span>
@@ -80,33 +43,26 @@
         <!-- Nom du réservant -->
         <span
           v-if="day.bookedBy"
-          class="text-[9px] font-medium leading-tight px-1 text-center truncate w-full"
+          class="absolute bottom-0.5 left-0 right-0 text-[7px] font-medium text-center truncate px-0.5 leading-tight"
           :class="day.isBenjThursday ? 'text-amber-100' : 'text-zinc-400'"
         >
           {{ day.bookedBy }}
         </span>
-
-        <!-- Dot "aujourd'hui" -->
-        <span
-          v-if="day.isToday"
-          class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-          :class="day.available && !day.isPast ? 'bg-white/50' : 'bg-zinc-300'"
-        />
       </button>
     </div>
 
     <!-- Légende -->
-    <div class="flex flex-wrap items-center gap-4 mt-6 pt-4 border-t border-zinc-100">
-      <span class="flex items-center gap-2 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-indigo-600 inline-block" />
+    <div class="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-zinc-100">
+      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
+        <span class="w-3 h-3 rounded-sm bg-indigo-600 inline-block shrink-0" />
         Disponible
       </span>
-      <span class="flex items-center gap-2 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-gradient-to-br from-amber-400 to-yellow-500 inline-block ring-1 ring-amber-400" />
+      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
+        <span class="w-3 h-3 rounded-sm bg-gradient-to-br from-amber-400 to-yellow-500 inline-block ring-1 ring-amber-400 shrink-0" />
         Benj Brichet (jeudi)
       </span>
-      <span class="flex items-center gap-2 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-indigo-600 ring-2 ring-orange-400 ring-offset-1 inline-block" />
+      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
+        <span class="w-3 h-3 rounded-sm bg-indigo-600 ring-2 ring-orange-400 ring-offset-1 inline-block shrink-0" />
         Ven / Sam / Dim
       </span>
     </div>
@@ -117,7 +73,6 @@
 import {
   startOfMonth, endOfMonth, eachDayOfInterval,
   getDay, format, isBefore, isToday, startOfDay,
-  startOfWeek, endOfWeek, isWithinInterval,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { DayAvailability } from '~/composables/useAppointments'
@@ -130,12 +85,7 @@ const currentDate = ref(new Date())
 const availability = ref<DayAvailability[]>([])
 const loading = ref(false)
 
-const weekDays = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM']
-
-const currentWeekInterval = {
-  start: startOfWeek(today, { weekStartsOn: 1 }),
-  end: endOfWeek(today, { weekStartsOn: 1 }),
-}
+const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 
 const currentMonthLabel = computed(() =>
   format(currentDate.value, 'MMMM yyyy', { locale: fr })
@@ -158,7 +108,6 @@ const daysInMonth = computed(() => {
       available: avail?.available ?? false,
       isPast: isBefore(day, today),
       isToday: isToday(day),
-      isCurrentWeek: isWithinInterval(day, currentWeekInterval),
       bookedBy: avail?.bookedBy,
       isBenjThursday: avail?.isBenjThursday ?? false,
       isWeekend: avail?.isWeekend ?? false,
@@ -168,7 +117,7 @@ const daysInMonth = computed(() => {
 
 function cellClass(day: ReturnType<typeof daysInMonth.value[0]['valueOf']>) {
   if (day.isBenjThursday) {
-    return 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white cursor-not-allowed ring-2 ring-amber-400 ring-offset-1 shadow-md shadow-amber-200'
+    return 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white cursor-not-allowed ring-2 ring-amber-300 ring-offset-1 shadow-sm shadow-amber-200'
   }
   if (day.isPast || (!day.available && !day.isBenjThursday)) {
     return 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
@@ -176,8 +125,7 @@ function cellClass(day: ReturnType<typeof daysInMonth.value[0]['valueOf']>) {
   if (day.isWeekend) {
     return 'bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 ring-2 ring-offset-1 ring-orange-400 shadow-sm'
   }
-  return 'bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 shadow-sm hover:shadow-indigo-200 hover:shadow-md'
-    + (day.isToday ? ' ring-2 ring-offset-1 ring-indigo-300' : '')
+  return 'bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 shadow-sm'
 }
 
 async function loadAvailability() {
