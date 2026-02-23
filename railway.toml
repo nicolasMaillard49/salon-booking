@@ -1,0 +1,7 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install --no-frozen-lockfile && pnpm --filter backend run build"
+
+[deploy]
+startCommand = "cd apps/backend && npx prisma migrate deploy --schema ../../packages/prisma/schema.prisma && node dist/main.js"
+restartPolicyType = "on_failure"
