@@ -44,14 +44,7 @@
     </div>
 
     <!-- Grille des jours -->
-    <div v-else class="relative">
-      <!-- Bande semaine en cours -->
-      <div
-        v-if="currentWeekRow >= 0"
-        class="absolute -left-2 -right-2 rounded-xl bg-indigo-50 border border-indigo-200 pointer-events-none z-0"
-        :style="{ top: `${6 + currentWeekRow * 72}px`, height: '76px' }"
-      />
-      <div class="grid grid-cols-7 gap-2 mt-3 relative z-10">
+    <div v-else class="grid grid-cols-7 gap-2 mt-3">
       <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-16" />
 
       <button
@@ -62,8 +55,25 @@
         :class="cellClass(day)"
         @click="day.available && !day.isPast && emit('select', day.date)"
       >
+        <!-- Badge semaine en cours -->
+        <span
+          v-if="day.isCurrentWeek"
+          class="absolute top-1 left-1/2 -translate-x-1/2 text-[7px] font-mono font-bold leading-none px-1.5 py-0.5 rounded-full whitespace-nowrap"
+          :class="(day.available && !day.isPast) || day.isBenjThursday
+            ? 'bg-white/25 text-white'
+            : 'bg-indigo-100 text-indigo-500'"
+        >
+          cette sem.
+        </span>
+
         <!-- Numéro du jour -->
-        <span class="font-mono font-semibold leading-none" :class="day.isBenjThursday ? 'text-base' : 'text-sm'">
+        <span
+          class="font-mono font-semibold leading-none"
+          :class="[
+            day.isBenjThursday ? 'text-base' : 'text-sm',
+            day.isCurrentWeek ? 'mt-2' : ''
+          ]"
+        >
           {{ day.dayNumber }}
         </span>
 
@@ -83,7 +93,6 @@
           :class="day.available && !day.isPast ? 'bg-white/50' : 'bg-zinc-300'"
         />
       </button>
-    </div>
     </div>
 
     <!-- Légende -->
@@ -108,6 +117,7 @@
 import {
   startOfMonth, endOfMonth, eachDayOfInterval,
   getDay, format, isBefore, isToday, startOfDay,
+  startOfWeek, endOfWeek, isWithinInterval,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import type { DayAvailability } from '~/composables/useAppointments'
@@ -122,12 +132,10 @@ const loading = ref(false)
 
 const weekDays = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM']
 
-const currentWeekRow = computed(() => {
-  const todayStr = format(today, 'yyyy-MM-dd')
-  const todayIdx = daysInMonth.value.findIndex(d => d.date === todayStr)
-  if (todayIdx === -1) return -1
-  return Math.floor((firstDayOffset.value + todayIdx) / 7)
-})
+const currentWeekInterval = {
+  start: startOfWeek(today, { weekStartsOn: 1 }),
+  end: endOfWeek(today, { weekStartsOn: 1 }),
+}
 
 const currentMonthLabel = computed(() =>
   format(currentDate.value, 'MMMM yyyy', { locale: fr })
@@ -150,6 +158,7 @@ const daysInMonth = computed(() => {
       available: avail?.available ?? false,
       isPast: isBefore(day, today),
       isToday: isToday(day),
+      isCurrentWeek: isWithinInterval(day, currentWeekInterval),
       bookedBy: avail?.bookedBy,
       isBenjThursday: avail?.isBenjThursday ?? false,
       isWeekend: avail?.isWeekend ?? false,
@@ -158,20 +167,15 @@ const daysInMonth = computed(() => {
 })
 
 function cellClass(day: ReturnType<typeof daysInMonth.value[0]['valueOf']>) {
-  // Jeudi Benj Brichet → doré
   if (day.isBenjThursday) {
     return 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white cursor-not-allowed ring-2 ring-amber-400 ring-offset-1 shadow-md shadow-amber-200'
   }
-  // Passé ou indisponible (réservé par qqn)
   if (day.isPast || (!day.available && !day.isBenjThursday)) {
     return 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
   }
-  // Disponible week-end (ven/sam/dim) → indigo + ring orange
   if (day.isWeekend) {
     return 'bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 ring-2 ring-offset-1 ring-orange-400 shadow-sm'
-    + (day.isToday ? ' ring-2 ring-offset-1 ring-orange-400' : '')
   }
-  // Disponible jour normal → indigo
   return 'bg-indigo-600 text-white cursor-pointer hover:bg-indigo-700 shadow-sm hover:shadow-indigo-200 hover:shadow-md'
     + (day.isToday ? ' ring-2 ring-offset-1 ring-indigo-300' : '')
 }
