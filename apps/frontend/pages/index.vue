@@ -7,12 +7,13 @@
         <div class="inline-flex items-center gap-2 bg-white border border-zinc-200 rounded-full px-4 py-1.5 mb-6 shadow-sm">
           <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
           <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Réservation en ligne</span>
+          <span class="w-px h-3 bg-zinc-200" />
+          <span class="text-xs font-mono font-semibold text-indigo-600">10 €</span>
         </div>
-        <h1 class="text-5xl font-bold tracking-tight text-zinc-900 mb-3">
-          Mon Salon<br />
-          <span class="text-indigo-600">de Coiffure</span>
+        <h1 class="text-5xl font-bold tracking-tight text-zinc-900 mb-1">
+          Nm.D.<span class="text-indigo-600">Barber</span>
         </h1>
-        <p class="text-zinc-500 text-base">Choisissez votre créneau, on s'occupe du reste.</p>
+        <p class="text-zinc-500 text-base mt-3">Choisissez votre créneau, on s'occupe du reste.</p>
       </div>
 
       <!-- Indicateur d'étape -->
@@ -21,24 +22,16 @@
           <div
             class="w-6 h-6 rounded-full text-xs font-mono font-bold flex items-center justify-center transition-colors duration-300"
             :class="!selectedDate ? 'bg-indigo-600 text-white' : 'bg-indigo-100 text-indigo-600'"
-          >
-            1
-          </div>
-          <span class="text-xs font-medium" :class="!selectedDate ? 'text-zinc-700' : 'text-zinc-400'">
-            Date
-          </span>
+          >1</div>
+          <span class="text-xs font-medium" :class="!selectedDate ? 'text-zinc-700' : 'text-zinc-400'">Date</span>
         </div>
         <div class="w-8 h-px" :class="selectedDate ? 'bg-indigo-400' : 'bg-zinc-200'" />
         <div class="flex items-center gap-1.5">
           <div
             class="w-6 h-6 rounded-full text-xs font-mono font-bold flex items-center justify-center transition-colors duration-300"
             :class="selectedDate ? 'bg-indigo-600 text-white' : 'bg-zinc-100 text-zinc-400'"
-          >
-            2
-          </div>
-          <span class="text-xs font-medium" :class="selectedDate ? 'text-zinc-700' : 'text-zinc-400'">
-            Infos
-          </span>
+          >2</div>
+          <span class="text-xs font-medium" :class="selectedDate ? 'text-zinc-700' : 'text-zinc-400'">Infos</span>
         </div>
       </div>
 
@@ -66,13 +59,20 @@
       <!-- Étape 1 : Calendrier -->
       <Transition name="slide">
         <div v-if="!selectedDate && !success" class="bg-white border border-zinc-200 rounded-2xl shadow-sm overflow-hidden">
-          <div class="px-6 py-4 border-b border-zinc-100 flex items-center gap-2.5">
-            <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-              <UIcon name="i-heroicons-calendar-days" class="w-4 h-4 text-indigo-600" />
+          <div class="px-6 py-4 border-b border-zinc-100 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <UIcon name="i-heroicons-calendar-days" class="w-4 h-4 text-indigo-600" />
+              </div>
+              <div>
+                <h2 class="text-sm font-semibold text-zinc-900">Choisissez une date</h2>
+                <p class="text-xs text-zinc-400">Les jeudis sont réservés · Ven/Sam/Dim en orange</p>
+              </div>
             </div>
-            <div>
-              <h2 class="text-sm font-semibold text-zinc-900">Choisissez une date</h2>
-              <p class="text-xs text-zinc-400">Les cases bleues sont disponibles</p>
+            <!-- Prix -->
+            <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1">
+              <UIcon name="i-heroicons-banknotes" class="w-3.5 h-3.5 text-indigo-500" />
+              <span class="text-xs font-mono font-semibold text-indigo-700">10 €</span>
             </div>
           </div>
           <div class="p-6">

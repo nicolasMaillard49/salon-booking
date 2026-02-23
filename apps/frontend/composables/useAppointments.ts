@@ -1,6 +1,9 @@
 export interface DayAvailability {
   date: string
   available: boolean
+  bookedBy?: string
+  isBenjThursday?: boolean
+  isWeekend?: boolean
 }
 
 export interface Appointment {

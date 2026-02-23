@@ -8,7 +8,7 @@
           <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
             <UIcon name="i-heroicons-scissors" class="w-4 h-4 text-white" />
           </div>
-          <span class="font-semibold text-zinc-900 tracking-tight">Mon Salon de Coiffure</span>
+          <span class="font-semibold text-zinc-900 tracking-tight">Nm.D.Barber</span>
         </div>
       </div>
 

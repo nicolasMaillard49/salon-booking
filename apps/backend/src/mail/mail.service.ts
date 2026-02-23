@@ -8,7 +8,7 @@ export class MailService {
   private resend = new Resend(process.env.RESEND_API_KEY);
   private adminEmail = process.env.ADMIN_EMAIL;
   private frontendUrl = process.env.FRONTEND_URL;
-  private fromEmail = 'Mon Salon <onboarding@resend.dev>';
+  private fromEmail = 'Nm.D.Barber <onboarding@resend.dev>';
 
   private formatDate(date: Date): string {
     return format(new Date(date), 'EEEE d MMMM yyyy', { locale: fr });
@@ -27,7 +27,7 @@ export class MailService {
         <p>Vous recevrez un email dès que votre rendez-vous sera confirmé ou annulé.</p>
         <p><a href="${statusUrl}">👉 Suivre mon rendez-vous</a></p>
         <hr/>
-        <small>Mon Salon de Coiffure</small>
+        <small>Nm.D.Barber</small>
       `,
     });
   }
@@ -66,7 +66,7 @@ export class MailService {
         }
         <p><a href="${statusUrl}">👉 Voir mon rendez-vous</a></p>
         <hr/>
-        <small>Mon Salon de Coiffure</small>
+        <small>Nm.D.Barber</small>
       `,
     });
   }

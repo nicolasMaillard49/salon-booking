@@ -8,7 +8,7 @@
           <UIcon name="i-heroicons-scissors" class="w-7 h-7 text-white" />
         </div>
         <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Espace admin</h1>
-        <p class="text-sm font-mono text-zinc-400 mt-1">Mon Salon de Coiffure</p>
+        <p class="text-sm font-mono text-zinc-400 mt-1">Nm.D.Barber</p>
       </div>
 
       <!-- Card login -->
@@ -58,7 +58,7 @@
       </div>
 
       <p class="text-center text-xs font-mono text-zinc-400 mt-6">
-        Accès réservé · Mon Salon de Coiffure
+        Accès réservé · Nm.D.Barber
       </p>
     </div>
   </div>

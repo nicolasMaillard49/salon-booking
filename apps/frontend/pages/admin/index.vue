@@ -10,7 +10,7 @@
           </div>
           <div>
             <span class="text-sm font-semibold text-zinc-900">Admin</span>
-            <span class="text-xs font-mono text-zinc-400 ml-2">· Mon Salon</span>
+            <span class="text-xs font-mono text-zinc-400 ml-2">· Nm.D.Barber</span>
           </div>
         </div>
         <UButton

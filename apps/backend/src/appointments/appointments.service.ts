@@ -33,20 +33,43 @@ export class AppointmentsService {
         date: { gte: from, lte: to },
         status: { not: 'CANCELLED' },
       },
-      select: { date: true },
+      select: { date: true, firstName: true, lastName: true },
     });
 
-    const bookedDates = booked.map(a => format(a.date, 'yyyy-MM-dd'));
-
     const allDays = eachDayOfInterval({ start: from, end: to });
-    return allDays.map(day => ({
-      date: format(day, 'yyyy-MM-dd'),
-      available: !bookedDates.includes(format(day, 'yyyy-MM-dd')),
-    }));
+    return allDays.map(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dayOfWeek = day.getDay(); // 0=Sun, 4=Thu, 5=Fri, 6=Sat
+      const isThursday = dayOfWeek === 4;
+      const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
+      const booking = booked.find(a => format(a.date, 'yyyy-MM-dd') === dateStr);
+
+      if (isThursday) {
+        return {
+          date: dateStr,
+          available: false,
+          bookedBy: 'Benj Brichet',
+          isBenjThursday: true,
+          isWeekend: false,
+        };
+      }
+
+      return {
+        date: dateStr,
+        available: !booking,
+        bookedBy: booking ? `${booking.firstName} ${booking.lastName[0]}.` : undefined,
+        isBenjThursday: false,
+        isWeekend,
+      };
+    });
   }
 
   async create(dto: CreateAppointmentDto) {
     const date = new Date(dto.date);
+
+    if (date.getDay() === 4) {
+      throw new ConflictException('Les jeudis sont réservés pour Benj Brichet.');
+    }
 
     const existing = await this.prisma.appointment.findFirst({
       where: {
