@@ -49,7 +49,7 @@
       <div
         v-if="currentWeekRow >= 0"
         class="absolute -left-2 -right-2 rounded-xl bg-indigo-50 border border-indigo-200 pointer-events-none z-0"
-        :style="{ top: `${12 + currentWeekRow * 72}px`, height: '64px' }"
+        :style="{ top: `${6 + currentWeekRow * 72}px`, height: '76px' }"
       />
       <div class="grid grid-cols-7 gap-2 mt-3 relative z-10">
       <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-16" />
