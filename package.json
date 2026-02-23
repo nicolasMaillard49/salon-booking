@@ -1,0 +1,23 @@
+{
+  "name": "salon-booking",
+  "private": true,
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@nestjs/core",
+      "@parcel/watcher",
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "prisma"
+    ]
+  },
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start:dev",
+    "db:up": "docker compose up -d",
+    "db:migrate": "pnpm --filter backend run db:migrate",
+    "db:generate": "pnpm --filter backend run db:generate",
+    "db:studio": "pnpm --filter backend run db:studio",
+    "db:migrate:deploy": "pnpm --filter backend run db:migrate:deploy"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(which npm && node --version && npm --version 2>&1)",
+      "Bash(tail:*)",
+      "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && pnpm --version 2>&1)",
+      "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && pnpm install 2>&1)",
+      "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && pnpm approve-builds 2>&1)",
+      "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && pnpm db:generate 2>&1)",
+      "Bash(cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && git init && git config user.email \"nicolasMaillard49@users.noreply.github.com\" && git config user.name \"nicolasMaillard49\" 2>&1)",
+      "Bash(head:*)"
+    ]
+  }
+}
