@@ -86,9 +86,9 @@
               </div>
             </div>
             <!-- Prix -->
-            <div class="flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 rounded-full px-3 py-1">
-              <UIcon name="i-heroicons-banknotes" class="w-3.5 h-3.5 text-indigo-500" />
-              <span class="text-xs font-mono font-semibold text-indigo-700">10 €</span>
+            <div class="flex items-center gap-1 bg-indigo-50 border border-indigo-100 rounded-full px-2 py-1 md:px-3 shrink-0">
+              <UIcon name="i-heroicons-banknotes" class="w-3 h-3 md:w-3.5 md:h-3.5 text-indigo-500 shrink-0" />
+              <span class="text-[10px] md:text-xs font-mono font-semibold text-indigo-700 whitespace-nowrap">10 €</span>
             </div>
           </div>
           <div class="p-6">
@@ -130,12 +130,6 @@
 <script setup lang="ts">
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
-
-const navButtons = [
-  { to: '/realisations', icon: 'i-heroicons-photo', label: 'Réalisations' },
-  { to: '/mes-rdv', icon: 'i-heroicons-calendar-days', label: 'Mes RDV' },
-  { to: '/admin', icon: 'i-heroicons-lock-closed', label: '' },
-]
 
 const selectedDate = ref<string | null>(null)
 const success = ref(false)
