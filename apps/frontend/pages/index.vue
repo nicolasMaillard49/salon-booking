@@ -2,17 +2,17 @@
   <div class="min-h-screen">
 
     <!-- Nav top-right -->
-    <div class="fixed top-4 right-4 z-20 flex flex-col md:flex-row items-end md:items-center gap-2">
-      <!-- Mobile : icônes seules verticales -->
-      <NuxtLink
-        v-for="btn in navButtons"
-        :key="btn.to"
-        :to="btn.to"
-        class="flex items-center gap-2 bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors cursor-pointer rounded-full"
-        :class="btn.label ? 'md:px-3 md:py-1.5 px-0 w-9 h-9 md:w-auto md:h-auto justify-center' : 'w-9 h-9 justify-center'"
-      >
-        <UIcon :name="btn.icon" class="w-4 h-4 shrink-0" />
-        <span v-if="btn.label" class="hidden md:inline text-sm font-medium">{{ btn.label }}</span>
+    <div class="fixed top-4 right-4 z-20 flex flex-col md:flex-row items-center gap-2">
+      <NuxtLink to="/realisations" class="w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-1.5 flex items-center justify-center gap-2 bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors rounded-full">
+        <UIcon name="i-heroicons-photo" class="w-4 h-4 shrink-0" />
+        <span class="hidden md:inline text-sm font-medium">Réalisations</span>
+      </NuxtLink>
+      <NuxtLink to="/mes-rdv" class="w-9 h-9 md:w-auto md:h-auto md:px-3 md:py-1.5 flex items-center justify-center gap-2 bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors rounded-full">
+        <UIcon name="i-heroicons-calendar-days" class="w-4 h-4 shrink-0" />
+        <span class="hidden md:inline text-sm font-medium">Mes RDV</span>
+      </NuxtLink>
+      <NuxtLink to="/admin" class="w-9 h-9 flex items-center justify-center bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 transition-colors rounded-full">
+        <UIcon name="i-heroicons-lock-closed" class="w-4 h-4" />
       </NuxtLink>
     </div>
 
