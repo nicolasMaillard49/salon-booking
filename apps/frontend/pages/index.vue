@@ -6,20 +6,18 @@
       <UButton
         to="/mes-rdv"
         icon="i-heroicons-calendar-days"
-        variant="ghost"
-        color="gray"
         size="sm"
-        class="bg-white/80 backdrop-blur border border-zinc-200 cursor-pointer"
+        color="gray"
+        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium"
       >
         Mes RDV
       </UButton>
       <UButton
         to="/admin"
         icon="i-heroicons-lock-closed"
-        variant="ghost"
-        color="gray"
         size="sm"
-        class="bg-white/80 backdrop-blur border border-zinc-200 cursor-pointer"
+        color="gray"
+        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer"
       />
     </div>
 

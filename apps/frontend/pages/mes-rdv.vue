@@ -3,11 +3,11 @@
 
     <!-- Nav -->
     <div class="fixed top-4 left-4 right-4 z-20 flex items-center justify-between">
-      <UButton to="/" icon="i-heroicons-arrow-left" variant="ghost" color="gray" size="sm" class="bg-white/80 backdrop-blur border border-zinc-200 cursor-pointer">
+      <UButton to="/" icon="i-heroicons-arrow-left" size="sm" color="gray" class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium">
         Retour
       </UButton>
-      <div class="bg-white/80 backdrop-blur border border-zinc-200 rounded-full px-4 py-1.5">
-        <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Nm.D.Barber</span>
+      <div class="bg-zinc-900 border border-zinc-700 rounded-full px-4 py-1.5">
+        <span class="text-xs font-mono text-zinc-300 tracking-wider uppercase">Nm.D.Barber</span>
       </div>
     </div>
 

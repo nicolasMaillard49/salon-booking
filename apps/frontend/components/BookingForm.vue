@@ -33,37 +33,48 @@
       <UForm :state="form" @submit="onSubmit" class="space-y-4">
 
         <div class="grid grid-cols-2 gap-3">
-          <UFormField label="Prénom" name="firstName" required>
-            <UInput
-              v-model="form.firstName"
-              placeholder="Jean"
-              icon="i-heroicons-user"
-              size="lg"
-              class="w-full"
-            />
-          </UFormField>
+          <!-- Prénom -->
+          <div class="space-y-1.5">
+            <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Prénom</label>
+            <div class="relative">
+              <UIcon name="i-heroicons-user" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+              <input
+                v-model="form.firstName"
+                type="text"
+                placeholder="Jean"
+                class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
+          </div>
 
-          <UFormField label="Nom" name="lastName" required>
-            <UInput
-              v-model="form.lastName"
-              placeholder="Dupont"
-              icon="i-heroicons-identification"
-              size="lg"
-              class="w-full"
-            />
-          </UFormField>
+          <!-- Nom -->
+          <div class="space-y-1.5">
+            <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Nom</label>
+            <div class="relative">
+              <UIcon name="i-heroicons-identification" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+              <input
+                v-model="form.lastName"
+                type="text"
+                placeholder="Dupont"
+                class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              />
+            </div>
+          </div>
         </div>
 
-        <UFormField label="Adresse email" name="email" required>
-          <UInput
-            v-model="form.email"
-            type="email"
-            placeholder="jean@email.com"
-            icon="i-heroicons-envelope"
-            size="lg"
-            class="w-full"
-          />
-        </UFormField>
+        <!-- Email -->
+        <div class="space-y-1.5">
+          <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Email</label>
+          <div class="relative">
+            <UIcon name="i-heroicons-envelope" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+            <input
+              v-model="form.email"
+              type="email"
+              placeholder="jean@email.com"
+              class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+            />
+          </div>
+        </div>
 
         <UAlert
           v-if="error"
@@ -73,22 +84,28 @@
           icon="i-heroicons-exclamation-triangle"
         />
 
-        <UButton
-          type="submit"
-          :loading="loading"
-          :disabled="!form.firstName || !form.lastName || !form.email"
-          block
-          size="lg"
-          color="primary"
-          class="cursor-pointer mt-2"
-        >
-          <span class="flex items-center gap-2">
-            Réserver pour 10 €
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
-          </span>
-        </UButton>
+        <!-- Séparateur -->
+        <div class="flex items-center gap-3">
+          <div class="flex-1 h-px bg-zinc-200" />
+          <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Confirmation</span>
+          <div class="flex-1 h-px bg-zinc-200" />
+        </div>
 
-        <p class="text-center text-xs text-zinc-400 font-mono">
+        <!-- Bouton submit -->
+        <button
+          type="submit"
+          :disabled="loading || !form.firstName || !form.lastName || !form.email"
+          class="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-zinc-900 text-white font-semibold text-sm tracking-wide hover:bg-zinc-700 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+        >
+          <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <template v-else>
+            Réserver pour
+            <span class="font-mono text-indigo-300 font-bold">10 €</span>
+            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
+          </template>
+        </button>
+
+        <p class="text-center text-[11px] text-zinc-400 font-mono">
           Un email de confirmation vous sera envoyé
         </p>
 
