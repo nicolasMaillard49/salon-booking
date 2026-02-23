@@ -22,15 +22,23 @@
       <!-- Formulaire recherche -->
       <div class="bg-white border border-zinc-200 rounded-2xl p-5 shadow-sm mb-6">
         <UForm :state="form" @submit="search" class="flex gap-3">
-          <UInput
-            v-model="form.email"
-            type="email"
+    
+
+            <UIcon name="i-heroicons-envelope" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+            <input
+              v-model="form.email"
+              type="email"
             placeholder="ton@email.com"
-            icon="i-heroicons-envelope"
-            size="lg"
-            class="flex-1 font-mono"
-            :disabled="loading"
-          />
+              class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                        :disabled="loading"
+
+            
+              />
+       
+
+
+
+
           <UButton
             type="submit"
             :loading="loading"

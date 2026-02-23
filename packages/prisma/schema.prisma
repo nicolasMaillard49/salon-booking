@@ -26,3 +26,11 @@ enum Status {
   CONFIRMED
   CANCELLED
 }
+
+model Photo {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String   @unique
+  caption   String?
+  createdAt DateTime @default(now())
+}

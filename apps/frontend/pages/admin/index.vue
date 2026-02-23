@@ -6,23 +6,35 @@
       <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center">
-            <UIcon name="i-heroicons-scissors" class="w-4 h-4 text-white" />
+            <UButton icon="i-heroicons-scissors" class="text-white" color="white"  to="/"/>
           </div>
           <div>
             <span class="text-sm font-semibold text-zinc-900">Admin</span>
             <span class="text-xs font-mono text-zinc-400 ml-2">· Nm.D.Barber</span>
           </div>
         </div>
-        <UButton
-          icon="i-heroicons-arrow-left-on-rectangle"
-          variant="ghost"
-          color="gray"
-          size="sm"
-          class="cursor-pointer"
-          @click="logout"
-        >
-          Déconnexion
-        </UButton>
+        <div class="flex items-center gap-2">
+          <UButton
+            to="/admin/photos"
+            icon="i-heroicons-photo"
+            variant="ghost"
+            color="gray"
+            size="sm"
+            class="cursor-pointer"
+          >
+            Réalisations
+          </UButton>
+          <UButton
+            icon="i-heroicons-arrow-left-on-rectangle"
+            variant="ghost"
+            color="gray"
+            size="sm"
+            class="cursor-pointer"
+            @click="logout"
+          >
+            Déconnexion
+          </UButton>
+        </div>
       </div>
     </div>
 

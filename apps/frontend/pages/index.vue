@@ -4,6 +4,15 @@
     <!-- Nav top-right -->
     <div class="fixed top-4 right-4 z-20 flex items-center gap-2">
       <UButton
+        to="/realisations"
+        icon="i-heroicons-photo"
+        size="sm"
+        color="gray"
+        class="bg-zinc-900 text-white border border-zinc-700 hover:bg-zinc-700 cursor-pointer font-medium"
+      >
+        Réalisations
+      </UButton>
+      <UButton
         to="/mes-rdv"
         icon="i-heroicons-calendar-days"
         size="sm"
