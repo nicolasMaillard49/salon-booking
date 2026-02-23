@@ -43,8 +43,8 @@
         <!-- Nom du réservant -->
         <span
           v-if="day.bookedBy"
-          class="absolute bottom-0.5 left-0 right-0 text-[7px] font-medium text-center truncate px-0.5 leading-tight"
-          :class="day.isBenjThursday ? 'text-amber-100' : 'text-zinc-400'"
+          class="absolute bottom-1 left-0 right-0 text-[10px] font-semibold text-center truncate px-1 leading-tight"
+          :class="day.isBenjThursday ? 'text-amber-100' : 'text-zinc-500'"
         >
           {{ day.bookedBy }}
         </span>
