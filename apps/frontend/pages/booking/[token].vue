@@ -1,109 +1,103 @@
 <template>
-  <div class="min-h-screen bg-pink-50 flex items-center justify-center px-4">
+  <div class="min-h-screen flex items-center justify-center px-4">
     <div class="max-w-md w-full">
 
-      <!-- Header -->
+      <!-- Brand -->
       <div class="text-center mb-8">
-        <UIcon name="i-heroicons-scissors" class="w-8 h-8 text-primary-500 mx-auto mb-2" />
-        <h1 class="text-2xl font-bold text-pink-900">Mon Salon de Coiffure</h1>
+        <div class="inline-flex items-center gap-2 mb-4">
+          <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
+            <UIcon name="i-heroicons-scissors" class="w-4 h-4 text-white" />
+          </div>
+          <span class="font-semibold text-zinc-900 tracking-tight">Mon Salon de Coiffure</span>
+        </div>
       </div>
 
-      <!-- Chargement -->
-      <UCard v-if="pending" class="text-center py-10">
-        <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-primary-400 mx-auto animate-spin mb-3" />
-        <p class="text-slate-500">Chargement de votre rendez-vous...</p>
-      </UCard>
+      <!-- Loading -->
+      <div v-if="pending" class="bg-white border border-zinc-200 rounded-2xl p-10 text-center">
+        <UIcon name="i-heroicons-arrow-path" class="w-7 h-7 text-indigo-400 mx-auto animate-spin mb-3" />
+        <p class="text-sm text-zinc-500 font-mono">Chargement du rendez-vous...</p>
+      </div>
 
       <!-- Erreur -->
-      <UCard v-else-if="error" class="text-center py-10">
-        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <UIcon name="i-heroicons-link-slash" class="w-8 h-8 text-red-500" />
+      <div v-else-if="error" class="bg-white border border-zinc-200 rounded-2xl p-10 text-center">
+        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <UIcon name="i-heroicons-link-slash" class="w-7 h-7 text-red-400" />
         </div>
-        <h2 class="text-xl font-bold text-slate-800 mb-2">Lien invalide</h2>
-        <p class="text-slate-500 mb-6">Ce rendez-vous est introuvable ou le lien a expiré.</p>
-        <UButton to="/" variant="soft" color="primary">Retour à l'accueil</UButton>
-      </UCard>
+        <h2 class="text-xl font-bold text-zinc-900 mb-2">Lien invalide</h2>
+        <p class="text-sm text-zinc-500 mb-6">Ce rendez-vous est introuvable ou le lien a expiré.</p>
+        <UButton to="/" variant="outline" color="gray" size="sm">Retour à l'accueil</UButton>
+      </div>
 
       <!-- RDV trouvé -->
-      <UCard v-else-if="appointment">
-        <template #header>
-          <div class="text-center pt-2">
-            <!-- Icône statut -->
-            <div
-              class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3"
-              :class="statusBg"
-            >
-              <UIcon :name="statusIcon" class="w-8 h-8" :class="statusIconColor" />
-            </div>
-            <UBadge :color="statusColor" size="lg" variant="soft">
-              {{ statusLabel }}
-            </UBadge>
+      <div v-else-if="appointment" class="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm">
+
+        <!-- Header statut -->
+        <div class="p-6 text-center border-b border-zinc-100" :class="statusHeaderBg">
+          <div
+            class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-3"
+            :class="statusIconBg"
+          >
+            <UIcon :name="statusIcon" class="w-8 h-8" :class="statusIconColor" />
           </div>
-        </template>
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border" :class="statusBadgeClass">
+            <span class="w-1.5 h-1.5 rounded-full" :class="[statusDot, appointment.status === 'PENDING' ? 'animate-pulse' : '']" />
+            {{ statusLabel }}
+          </div>
+        </div>
 
         <!-- Détails -->
-        <div class="space-y-3 py-2">
-          <div class="flex justify-between items-center py-2 border-b border-pink-100">
-            <span class="text-sm text-slate-500 flex items-center gap-1.5">
-              <UIcon name="i-heroicons-user" class="w-4 h-4" />
-              Client
-            </span>
-            <span class="text-sm font-medium text-slate-800">
+        <div class="p-6 space-y-3">
+          <div class="flex justify-between items-center py-2.5 border-b border-zinc-50">
+            <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Client</span>
+            <span class="text-sm font-semibold text-zinc-800">
               {{ appointment.firstName }} {{ appointment.lastName }}
             </span>
           </div>
-          <div class="flex justify-between items-center py-2 border-b border-pink-100">
-            <span class="text-sm text-slate-500 flex items-center gap-1.5">
-              <UIcon name="i-heroicons-calendar" class="w-4 h-4" />
-              Date
-            </span>
-            <span class="text-sm font-medium text-slate-800 capitalize">
+          <div class="flex justify-between items-center py-2.5 border-b border-zinc-50">
+            <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Date</span>
+            <span class="text-sm font-mono font-medium text-zinc-800 capitalize">
               {{ formatDate(appointment.date) }}
             </span>
           </div>
-          <div class="flex justify-between items-center py-2">
-            <span class="text-sm text-slate-500 flex items-center gap-1.5">
-              <UIcon name="i-heroicons-clock" class="w-4 h-4" />
-              Demandé le
-            </span>
-            <span class="text-sm font-medium text-slate-800">
+          <div class="flex justify-between items-center py-2.5">
+            <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Demandé le</span>
+            <span class="text-sm font-mono text-zinc-600">
               {{ formatDate(appointment.createdAt) }}
             </span>
           </div>
+
+          <UAlert
+            v-if="appointment.status === 'PENDING'"
+            color="yellow"
+            variant="soft"
+            description="Votre demande est en attente de confirmation. Vous recevrez un email dès validation."
+            icon="i-heroicons-clock"
+            class="mt-2"
+          />
+          <UAlert
+            v-else-if="appointment.status === 'CONFIRMED'"
+            color="green"
+            variant="soft"
+            description="Votre rendez-vous est confirmé. À bientôt !"
+            icon="i-heroicons-check-circle"
+            class="mt-2"
+          />
+          <UAlert
+            v-else
+            color="red"
+            variant="soft"
+            description="Ce rendez-vous a été annulé. Vous pouvez en réserver un autre."
+            icon="i-heroicons-x-circle"
+            class="mt-2"
+          />
         </div>
 
-        <!-- Alerte statut -->
-        <UAlert
-          v-if="appointment.status === 'PENDING'"
-          color="yellow"
-          variant="soft"
-          description="Votre demande est en attente de confirmation. Vous recevrez un email dès validation."
-          icon="i-heroicons-clock"
-          class="mt-4"
-        />
-        <UAlert
-          v-else-if="appointment.status === 'CONFIRMED'"
-          color="green"
-          variant="soft"
-          description="Votre rendez-vous est confirmé. À bientôt !"
-          icon="i-heroicons-check-circle"
-          class="mt-4"
-        />
-        <UAlert
-          v-else
-          color="red"
-          variant="soft"
-          description="Ce rendez-vous a été annulé. Vous pouvez en réserver un autre."
-          icon="i-heroicons-x-circle"
-          class="mt-4"
-        />
-
-        <template #footer>
-          <UButton to="/" variant="soft" color="primary" block>
+        <div class="px-6 pb-6">
+          <UButton to="/" variant="outline" color="gray" block>
             Retour à l'accueil
           </UButton>
-        </template>
-      </UCard>
+        </div>
+      </div>
 
     </div>
   </div>
@@ -122,33 +116,33 @@ const { data: appointment, pending, error } = await useAsyncData(
 )
 
 const statusLabel = computed(() => ({
-  PENDING: 'En attente',
-  CONFIRMED: 'Confirmé',
-  CANCELLED: 'Annulé',
+  PENDING: 'En attente', CONFIRMED: 'Confirmé', CANCELLED: 'Annulé',
 }[appointment.value?.status ?? 'PENDING']))
 
-const statusColor = computed(() => ({
-  PENDING: 'yellow' as const,
-  CONFIRMED: 'green' as const,
-  CANCELLED: 'red' as const,
+const statusHeaderBg = computed(() => ({
+  PENDING: 'bg-amber-50', CONFIRMED: 'bg-emerald-50', CANCELLED: 'bg-zinc-50',
 }[appointment.value?.status ?? 'PENDING']))
 
-const statusBg = computed(() => ({
-  PENDING: 'bg-yellow-100',
-  CONFIRMED: 'bg-green-100',
-  CANCELLED: 'bg-red-100',
+const statusIconBg = computed(() => ({
+  PENDING: 'bg-amber-100', CONFIRMED: 'bg-emerald-100', CANCELLED: 'bg-zinc-100',
 }[appointment.value?.status ?? 'PENDING']))
 
 const statusIcon = computed(() => ({
-  PENDING: 'i-heroicons-clock',
-  CONFIRMED: 'i-heroicons-check-circle',
-  CANCELLED: 'i-heroicons-x-circle',
+  PENDING: 'i-heroicons-clock', CONFIRMED: 'i-heroicons-check-circle', CANCELLED: 'i-heroicons-x-circle',
 }[appointment.value?.status ?? 'PENDING']))
 
 const statusIconColor = computed(() => ({
-  PENDING: 'text-yellow-600',
-  CONFIRMED: 'text-green-600',
-  CANCELLED: 'text-red-600',
+  PENDING: 'text-amber-500', CONFIRMED: 'text-emerald-500', CANCELLED: 'text-zinc-400',
+}[appointment.value?.status ?? 'PENDING']))
+
+const statusBadgeClass = computed(() => ({
+  PENDING: 'bg-amber-50 text-amber-700 border-amber-200',
+  CONFIRMED: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+  CANCELLED: 'bg-zinc-100 text-zinc-500 border-zinc-200',
+}[appointment.value?.status ?? 'PENDING']))
+
+const statusDot = computed(() => ({
+  PENDING: 'bg-amber-500', CONFIRMED: 'bg-emerald-500', CANCELLED: 'bg-zinc-400',
 }[appointment.value?.status ?? 'PENDING']))
 
 function formatDate(date: string) {

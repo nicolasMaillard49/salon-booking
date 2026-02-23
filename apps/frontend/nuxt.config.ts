@@ -1,8 +1,8 @@
 export default defineNuxtConfig({
   modules: ['@nuxt/ui'],
   ui: {
-    primary: 'pink',
-    gray: 'slate',
+    primary: 'indigo',
+    gray: 'zinc',
   },
   css: ['~/assets/css/main.css'],
   app: {
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         {
           rel: 'stylesheet',
-          href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap',
+          href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap',
         },
       ],
     },

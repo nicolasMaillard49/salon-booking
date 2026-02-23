@@ -1,70 +1,92 @@
 <template>
-  <div>
+  <div class="w-full">
     <!-- Navigation mois -->
     <div class="flex items-center justify-between mb-6">
       <UButton
         icon="i-heroicons-chevron-left"
         variant="ghost"
-        color="primary"
+        color="gray"
+        size="sm"
         :disabled="loading"
+        class="cursor-pointer"
         @click="prevMonth"
       />
-      <span class="font-semibold capitalize text-pink-900 tracking-wide">
-        {{ currentMonthLabel }}
-      </span>
+      <div class="text-center">
+        <p class="text-lg font-semibold tracking-tight text-zinc-900 capitalize">
+          {{ currentMonthLabel }}
+        </p>
+      </div>
       <UButton
         icon="i-heroicons-chevron-right"
         variant="ghost"
-        color="primary"
+        color="gray"
+        size="sm"
         :disabled="loading"
+        class="cursor-pointer"
         @click="nextMonth"
       />
     </div>
 
-    <!-- Jours de la semaine -->
-    <div class="grid grid-cols-7 gap-1 mb-2">
+    <!-- En-têtes jours — DM Mono pour le côté précis/geek -->
+    <div class="grid grid-cols-7 mb-2 border-b border-zinc-100 pb-2">
       <div
         v-for="d in weekDays"
         :key="d"
-        class="text-center text-xs text-slate-400 font-medium py-1 uppercase tracking-wider"
+        class="text-center text-xs font-mono text-zinc-400 tracking-widest uppercase py-1"
       >
         {{ d }}
       </div>
     </div>
 
-    <!-- Loading -->
-    <div v-if="loading" class="grid grid-cols-7 gap-1">
-      <div v-for="n in 35" :key="n" class="h-10 rounded-lg bg-pink-100 animate-pulse" />
+    <!-- Loading skeleton -->
+    <div v-if="loading" class="grid grid-cols-7 gap-1.5 mt-3">
+      <div
+        v-for="n in 35"
+        :key="n"
+        class="h-12 rounded-lg bg-zinc-100 animate-pulse"
+      />
     </div>
 
-    <!-- Grille -->
-    <div v-else class="grid grid-cols-7 gap-1">
-      <div v-for="_ in firstDayOffset" :key="`e-${_}`" />
+    <!-- Grille des jours -->
+    <div v-else class="grid grid-cols-7 gap-1.5 mt-3">
+      <!-- Cellules vides pour aligner le 1er jour -->
+      <div v-for="_ in firstDayOffset" :key="`e-${_}`" class="h-12" />
 
       <button
         v-for="day in daysInMonth"
         :key="day.date"
         :disabled="!day.available || day.isPast"
-        class="h-10 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer"
+        class="h-12 rounded-lg text-sm font-mono font-medium transition-all duration-200 relative flex items-center justify-center cursor-pointer"
         :class="{
-          'bg-primary-500 text-white hover:bg-primary-600 shadow-sm hover:shadow-md': day.available && !day.isPast,
-          'bg-pink-50 text-slate-300 cursor-not-allowed': !day.available || day.isPast,
-          'ring-2 ring-primary-300 ring-offset-1': day.isToday && (day.available && !day.isPast),
+          // Disponible
+          'bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm hover:shadow-indigo-200 hover:shadow-md': day.available && !day.isPast,
+          // Aujourd'hui disponible
+          'ring-2 ring-offset-1 ring-indigo-400': day.isToday && day.available && !day.isPast,
+          // Aujourd'hui indisponible
+          'ring-2 ring-offset-1 ring-zinc-300': day.isToday && (!day.available || day.isPast),
+          // Indisponible
+          'bg-zinc-100 text-zinc-300 cursor-not-allowed': !day.available || day.isPast,
         }"
         @click="day.available && !day.isPast && emit('select', day.date)"
       >
         {{ day.dayNumber }}
+        <!-- Point indicateur aujourd'hui -->
+        <span
+          v-if="day.isToday"
+          class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+          :class="day.available && !day.isPast ? 'bg-indigo-200' : 'bg-zinc-300'"
+        />
       </button>
     </div>
 
     <!-- Légende -->
-    <div class="flex gap-5 mt-5 text-xs text-slate-500">
-      <span class="flex items-center gap-1.5">
-        <span class="w-3 h-3 rounded-sm bg-primary-500 inline-block" />
+    <div class="flex items-center gap-6 mt-6 pt-4 border-t border-zinc-100">
+      <span class="flex items-center gap-2 text-xs text-zinc-500">
+        <span class="w-3 h-3 rounded-sm bg-indigo-600 inline-block" />
         Disponible
       </span>
-      <span class="flex items-center gap-1.5">
-        <span class="w-3 h-3 rounded-sm bg-pink-100 inline-block" />
+      <span class="flex items-center gap-2 text-xs text-zinc-500">
+        <span class="w-3 h-3 rounded-sm bg-zinc-100 border border-zinc-200 inline-block" />
         Indisponible
       </span>
     </div>
@@ -86,7 +108,7 @@ const currentDate = ref(new Date())
 const availability = ref<{ date: string; available: boolean }[]>([])
 const loading = ref(false)
 
-const weekDays = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim']
+const weekDays = ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM']
 
 const currentMonthLabel = computed(() =>
   format(currentDate.value, 'MMMM yyyy', { locale: fr })
@@ -116,8 +138,7 @@ const daysInMonth = computed(() => {
 async function loadAvailability() {
   loading.value = true
   try {
-    const month = format(currentDate.value, 'yyyy-MM')
-    availability.value = await getAvailability(month)
+    availability.value = await getAvailability(format(currentDate.value, 'yyyy-MM'))
   } finally {
     loading.value = false
   }

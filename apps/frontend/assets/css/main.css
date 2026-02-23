@@ -1,8 +1,23 @@
-body {
-  font-family: 'Inter', system-ui, sans-serif;
-  background-color: #fdf2f8;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap');
+
+*, *::before, *::after {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
 }
 
-h1, h2, h3, h4 {
-  font-family: 'Playfair Display', Georgia, serif;
+body {
+  background-color: #FAFAFA;
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: #18181b;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.font-mono, .tabular-nums, [class*="mono"] {
+  font-family: 'DM Mono', monospace;
 }

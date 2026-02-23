@@ -1,78 +1,108 @@
 <template>
-  <div class="min-h-screen bg-pink-50">
-    <div class="max-w-3xl mx-auto py-8 px-4">
+  <div class="min-h-screen">
 
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-primary-100 rounded-xl flex items-center justify-center">
-            <UIcon name="i-heroicons-scissors" class="w-5 h-5 text-primary-600" />
+    <!-- Topbar -->
+    <div class="bg-white border-b border-zinc-200 sticky top-0 z-10">
+      <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 bg-zinc-900 rounded-lg flex items-center justify-center">
+            <UIcon name="i-heroicons-scissors" class="w-4 h-4 text-white" />
           </div>
           <div>
-            <h1 class="text-xl font-bold text-pink-900">Tableau de bord</h1>
-            <p class="text-xs text-slate-400">Mon Salon de Coiffure</p>
+            <span class="text-sm font-semibold text-zinc-900">Admin</span>
+            <span class="text-xs font-mono text-zinc-400 ml-2">· Mon Salon</span>
           </div>
         </div>
         <UButton
+          icon="i-heroicons-arrow-left-on-rectangle"
           variant="ghost"
           color="gray"
-          icon="i-heroicons-arrow-left-on-rectangle"
           size="sm"
+          class="cursor-pointer"
           @click="logout"
         >
           Déconnexion
         </UButton>
       </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 py-8">
 
       <!-- Navigation semaine -->
-      <UCard class="mb-5 shadow-sm">
-        <div class="flex items-center justify-between">
-          <UButton icon="i-heroicons-chevron-left" variant="ghost" color="primary" @click="prevWeek" />
-          <div class="text-center">
-            <p class="text-xs text-slate-400 uppercase tracking-wider mb-0.5">Semaine du</p>
-            <p class="font-semibold text-pink-900 capitalize">{{ weekLabel }}</p>
-          </div>
-          <UButton icon="i-heroicons-chevron-right" variant="ghost" color="primary" @click="nextWeek" />
+      <div class="bg-white border border-zinc-200 rounded-xl p-4 mb-6 flex items-center justify-between shadow-sm">
+        <UButton
+          icon="i-heroicons-chevron-left"
+          variant="ghost"
+          color="gray"
+          size="sm"
+          class="cursor-pointer"
+          @click="prevWeek"
+        />
+        <div class="text-center">
+          <p class="text-xs font-mono text-zinc-400 uppercase tracking-widest mb-0.5">Semaine du</p>
+          <p class="text-base font-semibold tracking-tight text-zinc-900 capitalize">{{ weekLabel }}</p>
         </div>
-      </UCard>
-
-      <!-- Stats -->
-      <div v-if="weekData" class="grid grid-cols-3 gap-4 mb-5">
-        <UCard class="text-center shadow-sm" :ui="{ body: { padding: 'py-4 px-3' } }">
-          <p class="text-3xl font-bold text-slate-700">{{ weekData.total }}</p>
-          <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">Total</p>
-        </UCard>
-        <UCard class="text-center shadow-sm" :ui="{ body: { padding: 'py-4 px-3' } }">
-          <p class="text-3xl font-bold text-yellow-500">{{ weekData.pending }}</p>
-          <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">En attente</p>
-        </UCard>
-        <UCard class="text-center shadow-sm" :ui="{ body: { padding: 'py-4 px-3' } }">
-          <p class="text-3xl font-bold text-green-500">{{ weekData.confirmed }}</p>
-          <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">Confirmés</p>
-        </UCard>
+        <UButton
+          icon="i-heroicons-chevron-right"
+          variant="ghost"
+          color="gray"
+          size="sm"
+          class="cursor-pointer"
+          @click="nextWeek"
+        />
       </div>
 
-      <!-- Loading -->
-      <div v-if="loading" class="space-y-3">
-        <UCard v-for="n in 3" :key="n" class="animate-pulse">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-pink-100 rounded-full" />
-            <div class="flex-1 space-y-2">
-              <div class="h-4 bg-pink-100 rounded w-1/3" />
-              <div class="h-3 bg-pink-50 rounded w-1/2" />
-            </div>
+      <!-- Stats -->
+      <div v-if="weekData" class="grid grid-cols-3 gap-4 mb-6">
+        <div class="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Total</span>
+            <UIcon name="i-heroicons-calendar-days" class="w-4 h-4 text-zinc-300" />
           </div>
-        </UCard>
+          <p class="text-3xl font-bold font-mono text-zinc-900">{{ weekData.total }}</p>
+        </div>
+        <div class="bg-white border border-amber-200 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-amber-600 uppercase tracking-wider">En attente</span>
+            <span class="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+          </div>
+          <p class="text-3xl font-bold font-mono text-amber-600">{{ weekData.pending }}</p>
+        </div>
+        <div class="bg-white border border-emerald-200 rounded-xl p-4 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-mono text-emerald-600 uppercase tracking-wider">Confirmés</span>
+            <UIcon name="i-heroicons-check-circle" class="w-4 h-4 text-emerald-400" />
+          </div>
+          <p class="text-3xl font-bold font-mono text-emerald-600">{{ weekData.confirmed }}</p>
+        </div>
+      </div>
+
+      <!-- Loading skeleton -->
+      <div v-if="loading" class="space-y-3">
+        <div
+          v-for="n in 3"
+          :key="n"
+          class="bg-white border border-zinc-200 rounded-xl p-4 flex items-center gap-3 animate-pulse"
+        >
+          <div class="w-11 h-11 rounded-xl bg-zinc-100 shrink-0" />
+          <div class="flex-1 space-y-2">
+            <div class="h-4 bg-zinc-100 rounded w-1/3" />
+            <div class="h-3 bg-zinc-50 rounded w-1/2" />
+          </div>
+        </div>
       </div>
 
       <!-- Vide -->
-      <UCard v-else-if="weekData?.appointments.length === 0" class="text-center py-12 shadow-sm">
-        <UIcon name="i-heroicons-calendar-x-mark" class="w-10 h-10 text-slate-300 mx-auto mb-3" />
-        <p class="text-slate-400">Aucun rendez-vous cette semaine.</p>
-      </UCard>
+      <div
+        v-else-if="weekData?.appointments.length === 0"
+        class="bg-white border border-zinc-200 rounded-xl p-12 text-center shadow-sm"
+      >
+        <UIcon name="i-heroicons-calendar-x-mark" class="w-10 h-10 text-zinc-200 mx-auto mb-3" />
+        <p class="text-sm font-mono text-zinc-400">Aucun rendez-vous cette semaine.</p>
+      </div>
 
       <!-- Liste -->
-      <div v-else class="space-y-3">
+      <div v-else class="space-y-2.5">
         <AdminAppointmentCard
           v-for="appt in weekData?.appointments"
           :key="appt.id"

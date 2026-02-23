@@ -1,26 +1,40 @@
 <template>
-  <div class="min-h-screen bg-pink-50 flex items-center justify-center px-4">
+  <div class="min-h-screen flex items-center justify-center px-4">
     <div class="w-full max-w-sm">
 
-      <!-- Logo -->
+      <!-- Brand -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-14 h-14 bg-primary-100 rounded-2xl mb-4">
-          <UIcon name="i-heroicons-scissors" class="w-7 h-7 text-primary-600" />
+        <div class="w-14 h-14 bg-zinc-900 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <UIcon name="i-heroicons-scissors" class="w-7 h-7 text-white" />
         </div>
-        <h1 class="text-2xl font-bold text-pink-900">Espace Admin</h1>
-        <p class="text-slate-500 text-sm mt-1">Mon Salon de Coiffure</p>
+        <h1 class="text-2xl font-bold tracking-tight text-zinc-900">Espace admin</h1>
+        <p class="text-sm font-mono text-zinc-400 mt-1">Mon Salon de Coiffure</p>
       </div>
 
-      <UCard class="shadow-sm">
+      <!-- Card login -->
+      <div class="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm">
         <UForm :state="form" @submit="onSubmit" class="space-y-4">
+
           <UFormField label="Mot de passe" name="password">
             <UInput
               v-model="form.password"
-              type="password"
-              placeholder="••••••••"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="••••••••••"
               icon="i-heroicons-lock-closed"
-              size="md"
-            />
+              size="lg"
+              class="w-full font-mono"
+            >
+              <template #trailing>
+                <UButton
+                  :icon="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                  variant="ghost"
+                  color="gray"
+                  size="xs"
+                  class="cursor-pointer"
+                  @click="showPassword = !showPassword"
+                />
+              </template>
+            </UInput>
           </UFormField>
 
           <UAlert
@@ -28,17 +42,23 @@
             color="red"
             variant="soft"
             description="Mot de passe incorrect."
-            icon="i-heroicons-exclamation-triangle"
+            icon="i-heroicons-shield-exclamation"
           />
 
-          <UButton type="submit" :loading="loading" block size="md" color="primary">
-            Se connecter
+          <UButton
+            type="submit"
+            :loading="loading"
+            block
+            size="lg"
+            color="primary"
+          >
+            Accéder au dashboard
           </UButton>
         </UForm>
-      </UCard>
+      </div>
 
-      <p class="text-center text-xs text-slate-400 mt-6">
-        Accès réservé à l'équipe du salon
+      <p class="text-center text-xs font-mono text-zinc-400 mt-6">
+        Accès réservé · Mon Salon de Coiffure
       </p>
     </div>
   </div>
@@ -48,6 +68,7 @@
 const form = reactive({ password: '' })
 const loading = ref(false)
 const error = ref(false)
+const showPassword = ref(false)
 
 async function onSubmit() {
   loading.value = true
