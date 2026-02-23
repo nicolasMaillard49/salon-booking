@@ -1,0 +1,125 @@
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { MailService } from '../mail/mail.service';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { UpdateStatusDto } from './dto/update-status.dto';
+import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+
+@Injectable()
+export class AppointmentsService {
+  constructor(
+    private prisma: PrismaService,
+    private mail: MailService,
+  ) {}
+
+  async getAvailability(month?: string, start?: string, end?: string) {
+    let from: Date;
+    let to: Date;
+
+    if (month) {
+      const ref = new Date(`${month}-01`);
+      from = startOfMonth(ref);
+      to = endOfMonth(ref);
+    } else if (start && end) {
+      from = new Date(start);
+      to = new Date(end);
+    } else {
+      from = startOfMonth(new Date());
+      to = endOfMonth(new Date());
+    }
+
+    const booked = await this.prisma.appointment.findMany({
+      where: {
+        date: { gte: from, lte: to },
+        status: { not: 'CANCELLED' },
+      },
+      select: { date: true },
+    });
+
+    const bookedDates = booked.map(a => format(a.date, 'yyyy-MM-dd'));
+
+    const allDays = eachDayOfInterval({ start: from, end: to });
+    return allDays.map(day => ({
+      date: format(day, 'yyyy-MM-dd'),
+      available: !bookedDates.includes(format(day, 'yyyy-MM-dd')),
+    }));
+  }
+
+  async create(dto: CreateAppointmentDto) {
+    const date = new Date(dto.date);
+
+    const existing = await this.prisma.appointment.findFirst({
+      where: {
+        date,
+        status: { not: 'CANCELLED' },
+      },
+    });
+
+    if (existing) {
+      throw new ConflictException('Ce créneau est déjà réservé.');
+    }
+
+    const appointment = await this.prisma.appointment.create({
+      data: {
+        date,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        email: dto.email,
+      },
+    });
+
+    await this.mail.sendCreatedToClient(appointment);
+    await this.mail.sendCreatedToAdmin(appointment);
+
+    return appointment;
+  }
+
+  async findByToken(magicToken: string) {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { magicToken },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    return appointment;
+  }
+
+  async findByWeek(week?: string) {
+    const ref = week ? new Date(week) : new Date();
+    const from = startOfWeek(ref, { weekStartsOn: 1 });
+    const to = endOfWeek(ref, { weekStartsOn: 1 });
+
+    const appointments = await this.prisma.appointment.findMany({
+      where: { date: { gte: from, lte: to } },
+      orderBy: { date: 'asc' },
+    });
+
+    return {
+      week: format(from, 'yyyy-MM-dd'),
+      total: appointments.length,
+      pending: appointments.filter(a => a.status === 'PENDING').length,
+      confirmed: appointments.filter(a => a.status === 'CONFIRMED').length,
+      cancelled: appointments.filter(a => a.status === 'CANCELLED').length,
+      appointments,
+    };
+  }
+
+  async updateStatus(id: string, dto: UpdateStatusDto) {
+    const appointment = await this.prisma.appointment.findUnique({ where: { id } });
+
+    if (!appointment) {
+      throw new NotFoundException('Réservation introuvable.');
+    }
+
+    const updated = await this.prisma.appointment.update({
+      where: { id },
+      data: { status: dto.status },
+    });
+
+    await this.mail.sendStatusUpdate(updated);
+
+    return updated;
+  }
+}
