@@ -99,8 +99,7 @@
         >
           <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           <template v-else>
-            Réserver pour
-            <span class="font-mono text-indigo-300 font-bold">10 €</span>
+Faire une demande de réservation          
             <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
           </template>
         </button>
