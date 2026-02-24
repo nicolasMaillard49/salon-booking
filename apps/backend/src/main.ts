@@ -15,6 +15,6 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3001;
   await app.listen(port);
-  console.log(`Backend running on port ${port}`);
+  console.log(`Nm.D.Barber backend running on port ${port}`);
 }
 bootstrap();
