@@ -28,8 +28,6 @@
         <div class="inline-flex items-center gap-2 bg-white border border-zinc-200 rounded-full px-4 py-1.5 mb-6 shadow-sm">
           <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
           <span class="text-xs font-mono text-zinc-500 tracking-wider uppercase">Réservation en ligne</span>
-          <span class="w-px h-3 bg-zinc-200" />
-          <span class="text-xs font-mono font-semibold text-indigo-600">10 €</span>
         </div>
         <div class="flex flex-col-reverse md:flex-row items-center justify-center gap-3 mb-1">
           <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-zinc-900">
@@ -92,11 +90,6 @@
                 <h2 class="text-sm font-semibold text-zinc-900">Choisissez une date</h2>
                 <p class="text-xs text-zinc-400">Les jeudis sont réservés · Ven/Sam/Dim en orange</p>
               </div>
-            </div>
-            <!-- Prix -->
-            <div class="flex items-center gap-1 bg-indigo-50 border border-indigo-100 rounded-full px-2 py-1 md:px-3 shrink-0">
-              <UIcon name="i-heroicons-banknotes" class="w-3 h-3 md:w-3.5 md:h-3.5 text-indigo-500 shrink-0" />
-              <span class="text-[10px] md:text-xs font-mono font-semibold text-indigo-700 whitespace-nowrap">10 €</span>
             </div>
           </div>
           <div class="p-2 md:p-6">

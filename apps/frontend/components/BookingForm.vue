@@ -11,10 +11,6 @@
           <p class="text-indigo-400 text-xs font-mono uppercase tracking-widest mb-1">Nm.D.Barber — Réservation</p>
           <p class="text-white text-lg font-semibold capitalize leading-tight">{{ formatDate(date) }}</p>
         </div>
-        <div class="flex flex-col items-end shrink-0">
-          <span class="text-indigo-400 text-xs font-mono uppercase tracking-widest mb-1">Prix</span>
-          <span class="text-white text-2xl font-bold font-mono">10 €</span>
-        </div>
       </div>
 
       <!-- Bande de coupe ticket -->
