@@ -1,4 +1,5 @@
 import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Prisma } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -106,15 +107,25 @@ export class AppointmentsService {
       where: { date, timeSlot: dto.timeSlot, status: 'CANCELLED' },
     });
 
-    const appointment = await this.prisma.appointment.create({
-      data: {
-        date,
-        timeSlot: dto.timeSlot,
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        email: dto.email,
-      },
-    });
+    let appointment;
+
+    try {
+      appointment = await this.prisma.appointment.create({
+        data: {
+          date,
+          timeSlot: dto.timeSlot,
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          email: dto.email,
+        },
+      });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        throw new ConflictException('Ce créneau est déjà réservé.');
+      }
+
+      throw error;
+    }
 
     await this.mail.sendCreatedToClient(appointment);
     await this.mail.sendCreatedToAdmin(appointment);
