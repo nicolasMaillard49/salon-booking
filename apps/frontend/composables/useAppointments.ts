@@ -1,15 +1,21 @@
-export interface DayAvailability {
-  date: string
+export interface SlotAvailability {
+  time: string
   available: boolean
   bookedBy?: string
   isPending?: boolean
   isBenjThursday?: boolean
-  isWeekend?: boolean
+}
+
+export interface DayAvailability {
+  date: string
+  isWeekend: boolean
+  slots: SlotAvailability[]
 }
 
 export interface Appointment {
   id: string
   date: string
+  timeSlot: string
   firstName: string
   lastName: string
   email: string
@@ -37,6 +43,7 @@ export const useAppointments = () => {
 
   const createAppointment = (data: {
     date: string
+    timeSlot: string
     firstName: string
     lastName: string
     email: string
@@ -46,7 +53,7 @@ export const useAppointments = () => {
     $fetch<Appointment>(`${API}/appointments/status/${token}`)
 
   const getByEmail = (email: string) =>
-    $fetch<Pick<Appointment, 'id' | 'date' | 'firstName' | 'lastName' | 'status' | 'magicToken' | 'createdAt'>[]>(
+    $fetch<Pick<Appointment, 'id' | 'date' | 'timeSlot' | 'firstName' | 'lastName' | 'status' | 'magicToken' | 'createdAt'>[]>(
       `${API}/appointments/my?email=${encodeURIComponent(email)}`
     )
 

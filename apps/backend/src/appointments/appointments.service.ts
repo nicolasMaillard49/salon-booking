@@ -4,6 +4,7 @@ import { MailService } from '../mail/mail.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
+import { getSlotsForDay, isWeekendDay } from './slots.config';
 
 @Injectable()
 export class AppointmentsService {
@@ -33,48 +34,65 @@ export class AppointmentsService {
         date: { gte: from, lte: to },
         status: { not: 'CANCELLED' },
       },
-      select: { date: true, firstName: true, lastName: true, status: true },
+      select: { date: true, timeSlot: true, firstName: true, lastName: true, status: true },
     });
 
     const allDays = eachDayOfInterval({ start: from, end: to });
     return allDays.map(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dayOfWeek = day.getDay(); // 0=Sun, 4=Thu, 5=Fri, 6=Sat
+      const dayOfWeek = day.getDay();
+      const isWeekend = isWeekendDay(dayOfWeek);
       const isThursday = dayOfWeek === 4;
-      const isWeekend = dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
-      const booking = booked.find(a => format(a.date, 'yyyy-MM-dd') === dateStr);
+      const daySlots = getSlotsForDay(dayOfWeek);
 
-      if (isThursday) {
+      const slots = daySlots.map(time => {
+        // Thursday noon = Benj Brichet
+        if (isThursday && time === '12:00') {
+          return {
+            time,
+            available: false,
+            bookedBy: 'Benj Brichet',
+            isPending: false,
+            isBenjThursday: true,
+          };
+        }
+
+        const booking = booked.find(
+          a => format(a.date, 'yyyy-MM-dd') === dateStr && a.timeSlot === time,
+        );
+
         return {
-          date: dateStr,
-          available: false,
-          bookedBy: 'Benj Brichet',
-          isBenjThursday: true,
-          isWeekend: false,
+          time,
+          available: !booking,
+          bookedBy: booking ? `${booking.firstName} ${booking.lastName[0]}.` : undefined,
+          isPending: booking ? booking.status === 'PENDING' : false,
+          isBenjThursday: false,
         };
-      }
+      });
 
-      return {
-        date: dateStr,
-        available: !booking,
-        bookedBy: booking ? `${booking.firstName} ${booking.lastName[0]}.` : undefined,
-        isPending: booking ? booking.status === 'PENDING' : false,
-        isBenjThursday: false,
-        isWeekend,
-      };
+      return { date: dateStr, isWeekend, slots };
     });
   }
 
   async create(dto: CreateAppointmentDto) {
     const date = new Date(dto.date);
+    const dayOfWeek = date.getDay();
+    const allowedSlots = getSlotsForDay(dayOfWeek);
 
-    if (date.getDay() === 4) {
-      throw new ConflictException('Les jeudis sont réservés pour Benj Brichet.');
+    // Validate slot is allowed for this day
+    if (!allowedSlots.includes(dto.timeSlot)) {
+      throw new BadRequestException(`Le créneau ${dto.timeSlot} n'est pas disponible ce jour.`);
+    }
+
+    // Thursday noon = Benj
+    if (dayOfWeek === 4 && dto.timeSlot === '12:00') {
+      throw new ConflictException('Le jeudi midi est réservé pour Benj Brichet.');
     }
 
     const existing = await this.prisma.appointment.findFirst({
       where: {
         date,
+        timeSlot: dto.timeSlot,
         status: { not: 'CANCELLED' },
       },
     });
@@ -83,14 +101,15 @@ export class AppointmentsService {
       throw new ConflictException('Ce créneau est déjà réservé.');
     }
 
-    // Libère le créneau si un RDV annulé occupe encore la date (contrainte unique)
+    // Clean up cancelled appointments on same slot
     await this.prisma.appointment.deleteMany({
-      where: { date, status: 'CANCELLED' },
+      where: { date, timeSlot: dto.timeSlot, status: 'CANCELLED' },
     });
 
     const appointment = await this.prisma.appointment.create({
       data: {
         date,
+        timeSlot: dto.timeSlot,
         firstName: dto.firstName,
         lastName: dto.lastName,
         email: dto.email,
@@ -111,6 +130,7 @@ export class AppointmentsService {
       select: {
         id: true,
         date: true,
+        timeSlot: true,
         firstName: true,
         lastName: true,
         status: true,

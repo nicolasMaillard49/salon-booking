@@ -59,6 +59,12 @@
               {{ formatDate(appointment.date) }}
             </span>
           </div>
+          <div class="flex justify-between items-center py-2.5 border-b border-zinc-50">
+            <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Heure</span>
+            <span class="text-sm font-mono font-medium text-zinc-800">
+              {{ appointment.timeSlot }}
+            </span>
+          </div>
           <div class="flex justify-between items-center py-2.5">
             <span class="text-xs font-mono text-zinc-400 uppercase tracking-wider">Demandé le</span>
             <span class="text-sm font-mono text-zinc-600">

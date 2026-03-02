@@ -17,7 +17,7 @@
           {{ appointment.firstName }} {{ appointment.lastName }}
         </p>
         <p class="text-xs font-mono text-zinc-500 capitalize mt-0.5">
-          {{ formatDate(appointment.date) }}
+          {{ formatDate(appointment.date) }} · {{ appointment.timeSlot }}
         </p>
         <p class="text-xs text-zinc-400 truncate">{{ appointment.email }}</p>
       </div>

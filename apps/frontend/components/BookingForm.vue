@@ -9,7 +9,7 @@
       <div class="relative flex items-start justify-between gap-4">
         <div>
           <p class="text-indigo-400 text-xs font-mono uppercase tracking-widest mb-1">Nm.D.Barber — Réservation</p>
-          <p class="text-white text-lg font-semibold capitalize leading-tight">{{ formatDate(date) }}</p>
+          <p class="text-white text-lg font-semibold capitalize leading-tight">{{ formatDateTime() }}</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ Faire une demande de réservation
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-const props = defineProps<{ date: string }>()
+const props = defineProps<{ date: string; timeSlot: string }>()
 const emit = defineEmits<{ success: [] }>()
 const { createAppointment } = useAppointments()
 
@@ -126,11 +126,15 @@ function formatDate(date: string) {
   return format(new Date(date), 'EEEE d MMMM yyyy', { locale: fr })
 }
 
+function formatDateTime() {
+  return `${formatDate(props.date)} à ${props.timeSlot}`
+}
+
 async function onSubmit() {
   loading.value = true
   error.value = ''
   try {
-    await createAppointment({ ...form, date: props.date })
+    await createAppointment({ ...form, date: props.date, timeSlot: props.timeSlot })
     emit('success')
   } catch (e: any) {
     error.value = e?.data?.message || 'Une erreur est survenue. Veuillez réessayer.'

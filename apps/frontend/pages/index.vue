@@ -119,7 +119,7 @@
             </div>
           </div>
           <div class="p-6">
-            <BookingForm :date="selectedDate" @success="onSuccess" />
+            <BookingForm :date="selectedDate" :time-slot="selectedTimeSlot" @success="onSuccess" />
           </div>
         </div>
       </Transition>
@@ -133,26 +133,30 @@ import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 const selectedDate = ref<string | null>(null)
+const selectedTimeSlot = ref<string | null>(null)
 const success = ref(false)
 
-const formatSelectedDate = computed(() =>
-  selectedDate.value
-    ? format(new Date(selectedDate.value), 'EEEE d MMMM yyyy', { locale: fr })
-    : ''
-)
+const formatSelectedDate = computed(() => {
+  if (!selectedDate.value) return ''
+  const dateStr = format(new Date(selectedDate.value), 'EEEE d MMMM yyyy', { locale: fr })
+  return selectedTimeSlot.value ? `${dateStr} à ${selectedTimeSlot.value}` : dateStr
+})
 
-function onDateSelected(date: string) {
-  selectedDate.value = date
+function onDateSelected(payload: { date: string; timeSlot: string }) {
+  selectedDate.value = payload.date
+  selectedTimeSlot.value = payload.timeSlot
   success.value = false
 }
 
 function onSuccess() {
   selectedDate.value = null
+  selectedTimeSlot.value = null
   success.value = true
 }
 
 function goHome() {
   selectedDate.value = null
+  selectedTimeSlot.value = null
   success.value = false
 }
 </script>

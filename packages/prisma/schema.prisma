@@ -12,6 +12,7 @@ datasource db {
 model Appointment {
   id         String   @id @default(cuid())
   date       DateTime @db.Date
+  timeSlot   String
   firstName  String
   lastName   String
   email      String
@@ -20,7 +21,7 @@ model Appointment {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([date])
+  @@unique([date, timeSlot])
 }
 
 enum Status {

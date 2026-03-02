@@ -90,7 +90,7 @@
                       {{ appt.firstName }} {{ appt.lastName }}
                     </p>
                     <p class="text-xs font-mono text-zinc-500 capitalize mt-0.5">
-                      {{ formatDate(appt.date) }}
+                      {{ formatDate(appt.date) }} · {{ appt.timeSlot }}
                     </p>
                   </div>
                 </div>
