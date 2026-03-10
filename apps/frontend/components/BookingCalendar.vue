@@ -195,18 +195,18 @@
     </Transition>
 
     <!-- Légende -->
-    <div class="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-zinc-100">
-      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-indigo-600 inline-block shrink-0" />
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-6 pt-6 border-t border-zinc-100">
+      <span class="flex items-center gap-2 text-sm text-zinc-600">
+        <span class="w-4 h-4 rounded bg-zinc-900 inline-block" />
         Disponible
       </span>
-      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-gradient-to-br from-amber-400 to-yellow-500 inline-block ring-1 ring-amber-400 shrink-0" />
+      <span class="flex items-center gap-2 text-sm text-zinc-600">
+        <span class="w-4 h-4 rounded bg-red-500 inline-block" />
         Benj Brichet
       </span>
-      <span class="flex items-center gap-1.5 text-xs text-zinc-500">
-        <span class="w-3 h-3 rounded-sm bg-indigo-600 ring-2 ring-orange-400 ring-offset-1 inline-block shrink-0" />
-        Ven / Sam / Dim
+      <span class="flex items-center gap-2 text-sm text-zinc-600">
+        <span class="w-4 h-4 rounded bg-zinc-400 inline-block" />
+        Complet
       </span>
     </div>
   </div>

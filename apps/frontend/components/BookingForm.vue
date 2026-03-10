@@ -1,112 +1,127 @@
 <template>
-  <div class="rounded-2xl overflow-hidden border border-zinc-200 shadow-sm">
-
-    <!-- Header billet — fond indigo foncé -->
-    <div class="bg-indigo-950 px-6 py-5 relative">
-      <!-- Pattern points subtil -->
-      <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 16px 16px;" />
-
-      <div class="relative flex items-start justify-between gap-4">
-        <div>
-          <p class="text-indigo-400 text-xs font-mono uppercase tracking-widest mb-1">Nm.D.Barber — Réservation</p>
-          <p class="text-white text-lg font-semibold capitalize leading-tight">{{ formatDateTime() }}</p>
-        </div>
+  <div class="space-y-6">
+    <!-- Ticket Header -->
+    <div class="bg-zinc-900 rounded-2xl p-6 relative overflow-hidden">
+      <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 20px 20px;" />
+      <div class="relative">
+        <p class="text-red-500 text-xs font-semibold uppercase tracking-wider mb-1">Nm.D.Barber</p>
+        <p class="text-white text-xl font-bold capitalize">{{ formatDateTime() }}</p>
       </div>
-
-      <!-- Bande de coupe ticket -->
-      <div class="absolute -bottom-px left-0 right-0 flex">
-        <div class="h-3 w-4 bg-zinc-50 rounded-tr-full" />
-        <div class="flex-1 border-b-2 border-dashed border-indigo-800/60" />
-        <div class="h-3 w-4 bg-zinc-50 rounded-tl-full" />
+      <!-- Ticket cutout effect -->
+      <div class="absolute -bottom-3 left-0 right-0 flex">
+        <div class="h-6 w-6 bg-white rounded-tr-full" />
+        <div class="flex-1 border-b-2 border-dashed border-zinc-700" />
+        <div class="h-6 w-6 bg-white rounded-tl-full" />
       </div>
     </div>
 
-    <!-- Encoche gauche + droite -->
-    <div class="relative bg-white px-6 pt-6 pb-6">
-      <div class="absolute -top-3.5 -left-3.5 w-7 h-7 rounded-full bg-zinc-50 border border-zinc-200" />
-      <div class="absolute -top-3.5 -right-3.5 w-7 h-7 rounded-full bg-zinc-50 border border-zinc-200" />
+    <!-- Form -->
+    <div class="bg-white rounded-2xl p-6 border border-zinc-200">
+      <!-- Cutout continuations -->
+      <div class="absolute -top-3 left-6 w-6 h-6 rounded-full bg-zinc-100 border border-zinc-200" />
+      <div class="absolute -top-3 right-6 w-6 h-6 rounded-full bg-zinc-100 border border-zinc-200" />
 
-      <UForm :state="form" @submit="onSubmit" class="space-y-4">
-
-        <div class="grid grid-cols-2 gap-3">
-          <!-- Prénom -->
-          <div class="space-y-1.5">
-            <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Prénom</label>
+      <UForm :state="form" @submit="onSubmit" class="space-y-5">
+        <!-- Name Fields -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-zinc-700">Prénom</label>
             <div class="relative">
-              <UIcon name="i-heroicons-user" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+              <UIcon name="i-heroicons-user" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
               <input
                 v-model="form.firstName"
                 type="text"
                 placeholder="Jean"
-                class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                class="w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:bg-white transition-all"
               />
             </div>
           </div>
 
-          <!-- Nom -->
-          <div class="space-y-1.5">
-            <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Nom</label>
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-zinc-700">Nom</label>
             <div class="relative">
-              <UIcon name="i-heroicons-identification" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+              <UIcon name="i-heroicons-user-circle" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
               <input
                 v-model="form.lastName"
                 type="text"
                 placeholder="Dupont"
-                class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+                class="w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:bg-white transition-all"
               />
             </div>
           </div>
         </div>
 
         <!-- Email -->
-        <div class="space-y-1.5">
-          <label class="block text-[11px] font-mono font-semibold text-zinc-500 uppercase tracking-widest">Email</label>
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-zinc-700">Email</label>
           <div class="relative">
-            <UIcon name="i-heroicons-envelope" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-indigo-400 z-10 pointer-events-none" />
+            <UIcon name="i-heroicons-envelope" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
             <input
               v-model="form.email"
               type="email"
-              placeholder="jean@email.com"
-              class="w-full pl-9 pr-3 py-2.5 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-900 text-sm font-medium placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent focus:bg-white transition-all duration-200"
+              placeholder="jean.dupont@email.com"
+              class="w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:bg-white transition-all"
             />
           </div>
         </div>
 
+        <!-- Phone (optional) -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-zinc-700">
+            Téléphone <span class="text-zinc-400 font-normal">(optionnel)</span>
+          </label>
+          <div class="relative">
+            <UIcon name="i-heroicons-phone" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+            <input
+              v-model="form.phone"
+              type="tel"
+              placeholder="06 12 34 56 78"
+              class="w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:bg-white transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-zinc-700">
+            Notes <span class="text-zinc-400 font-normal">(optionnel)</span>
+          </label>
+          <textarea
+            v-model="form.notes"
+            rows="3"
+            placeholder="Type de coupe souhaité, préférences..."
+            class="w-full px-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900 focus:bg-white transition-all resize-none"
+          />
+        </div>
+
+        <!-- Error -->
         <UAlert
           v-if="error"
           color="red"
           variant="soft"
           :description="error"
           icon="i-heroicons-exclamation-triangle"
+          class="rounded-xl"
         />
 
-        <!-- Séparateur -->
-        <div class="flex items-center gap-3">
-          <div class="flex-1 h-px bg-zinc-200" />
-          <span class="text-[10px] font-mono text-zinc-400 uppercase tracking-widest">Confirmation</span>
-          <div class="flex-1 h-px bg-zinc-200" />
-        </div>
-
-        <!-- Bouton submit -->
+        <!-- Submit -->
         <button
           type="submit"
-          :disabled="loading || !form.firstName || !form.lastName || !form.email"
-          class="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-zinc-900 text-white font-semibold text-sm tracking-wide hover:bg-zinc-700 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          :disabled="loading || !isValid"
+          class="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-zinc-900 text-white font-semibold hover:bg-zinc-800 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <span v-if="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          <span v-if="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
           <template v-else>
-Faire une demande de réservation          
-            <UIcon name="i-heroicons-arrow-right" class="w-4 h-4" />
+            Confirmer ma réservation
+            <UIcon name="i-heroicons-check-circle" class="w-5 h-5" />
           </template>
         </button>
 
-        <p class="text-center text-[11px] text-zinc-400 font-mono">
-          Un email de confirmation vous sera envoyé
+        <p class="text-center text-sm text-zinc-500">
+          Un email de confirmation vous sera envoyé à {{ form.email || 'votre adresse' }}
         </p>
-
       </UForm>
     </div>
-
   </div>
 </template>
 
@@ -120,7 +135,17 @@ const { createAppointment } = useAppointments()
 
 const loading = ref(false)
 const error = ref('')
-const form = reactive({ firstName: '', lastName: '', email: '' })
+const form = reactive({ 
+  firstName: '', 
+  lastName: '', 
+  email: '',
+  phone: '',
+  notes: ''
+})
+
+const isValid = computed(() => {
+  return form.firstName && form.lastName && form.email && form.email.includes('@')
+})
 
 function formatDate(date: string) {
   return format(new Date(date), 'EEEE d MMMM yyyy', { locale: fr })
@@ -134,7 +159,11 @@ async function onSubmit() {
   loading.value = true
   error.value = ''
   try {
-    await createAppointment({ ...form, date: props.date, timeSlot: props.timeSlot })
+    await createAppointment({ 
+      ...form, 
+      date: props.date, 
+      timeSlot: props.timeSlot 
+    })
     emit('success')
   } catch (e: any) {
     error.value = e?.data?.message || 'Une erreur est survenue. Veuillez réessayer.'
