@@ -46,19 +46,15 @@
           </NuxtLink>
         </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-3 gap-6 max-w-lg mx-auto">
+        <!-- Stats - Simplified -->
+        <div class="grid grid-cols-2 gap-6 max-w-lg mx-auto">
           <div class="text-center">
-            <div class="text-3xl md:text-4xl font-bold text-white">500+</div>
+            <div class="text-3xl md:text-4xl font-bold text-white">100%</div>
             <div class="text-white/60 text-sm mt-1">Clients satisfaits</div>
           </div>
-          <div class="text-center border-x border-white/20">
-            <div class="text-3xl md:text-4xl font-bold text-white">5</div>
-            <div class="text-white/60 text-sm mt-1">Années d'exp.</div>
-          </div>
           <div class="text-center">
-            <div class="text-3xl md:text-4xl font-bold text-white">4.9</div>
-            <div class="text-white/60 text-sm mt-1">Note moyenne</div>
+            <div class="text-3xl md:text-4xl font-bold text-white">1</div>
+            <div class="text-white/60 text-sm mt-1">Année d'expérience</div>
           </div>
         </div>
       </div>
@@ -66,39 +62,6 @@
       <!-- Scroll indicator -->
       <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
         <UIcon name="i-heroicons-chevron-down" class="w-6 h-6 text-white/50" />
-      </div>
-    </section>
-
-    <!-- Services Section -->
-    <section id="services" class="py-20 md:py-32 bg-zinc-50">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <span class="text-red-600 font-semibold text-sm uppercase tracking-wider">Nos prestations</span>
-          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-900 mt-3">
-            Ce qu'on fait de mieux
-          </h2>
-          <p class="text-zinc-600 mt-4 max-w-2xl mx-auto text-lg">
-            Des coupes modernes et personnalisées pour sublimer votre style
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6 lg:gap-8">
-          <div 
-            v-for="(service, index) in services" 
-            :key="index"
-            class="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 border border-zinc-100 hover:border-red-100"
-          >
-            <div class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-100 transition-colors">
-              <UIcon :name="service.icon" class="w-7 h-7 text-red-600" />
-            </div>
-            <h3 class="text-xl font-bold text-zinc-900 mb-3">{{ service.title }}</h3>
-            <p class="text-zinc-600 mb-4 leading-relaxed">{{ service.description }}</p>
-            <div class="flex items-center justify-between pt-4 border-t border-zinc-100">
-              <span class="text-2xl font-bold text-zinc-900">{{ service.price }}€</span>
-              <span class="text-sm text-zinc-500">{{ service.duration }}</span>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -150,7 +113,7 @@
             </p>
             <button 
               @click="resetBooking"
-              class="bg-zinc-900 text-white px-6 py-3 rounded-full font-medium hover:bg-zinc-800 transition-colors"
+              class="bg-zinc-900 text-white px-6 py-2 rounded-full font-medium hover:bg-zinc-800 transition-colors"
             >
               Nouveau rendez-vous
             </button>
@@ -196,92 +159,17 @@
         </Transition>
       </div>
     </section>
-
-    <!-- Testimonials -->
-    <section class="py-20 md:py-32 bg-zinc-900">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <span class="text-red-500 font-semibold text-sm uppercase tracking-wider">Avis clients</span>
-          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mt-3">
-            Ils nous font confiance
-          </h2>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6">
-          <div 
-            v-for="(review, index) in reviews" 
-            :key="index"
-            class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 md:p-8"
-          >
-            <div class="flex gap-1 mb-4">
-              <UIcon v-for="n in 5" :key="n" name="i-heroicons-star-solid" class="w-5 h-5 text-yellow-400" />
-            </div>
-            <p class="text-white/90 mb-6 leading-relaxed">"{{ review.text }}"</p>
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                <span class="text-red-400 font-bold">{{ review.name.charAt(0) }}</span>
-              </div>
-              <div>
-                <div class="font-semibold text-white">{{ review.name }}</div>
-                <div class="text-sm text-white/50">{{ review.date }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 const selectedDate = ref(null)
 const selectedTimeSlot = ref(null)
 const success = ref(false)
-
-const services = [
-  {
-    icon: 'i-heroicons-scissors',
-    title: 'Coupe homme',
-    description: 'Coupe personnalisée selon votre style et la forme de votre visage. Shampoing inclus.',
-    price: 25,
-    duration: '30 min'
-  },
-  {
-    icon: 'i-heroicons-sparkles',
-    title: 'Coupe + Barbe',
-    description: 'Le combo parfait : coupe de cheveux et taille de barbe complète.',
-    price: 35,
-    duration: '45 min'
-  },
-  {
-    icon: 'i-heroicons-user-circle',
-    title: 'Taille de barbe',
-    description: 'Rasage à l\'ancienne ou taille précise. Huiles et soins inclus.',
-    price: 15,
-    duration: '20 min'
-  }
-]
-
-const reviews = [
-  {
-    text: "Meilleur barber de la ville ! La précision du travail est incroyable. Je recommande à 100%.",
-    name: "Thomas",
-    date: "Il y a 3 jours"
-  },
-  {
-    text: "Accueil chaleureux, ambiance cool et surtout une coupe parfaite. C'est devenu mon rendez-vous mensuel.",
-    name: "Kevin",
-    date: "Il y a 1 semaine"
-  },
-  {
-    text: "Enfin un barber qui comprend ce que je veux. Le soin de la barbe est exceptionnel.",
-    name: "Marc",
-    date: "Il y a 2 semaines"
-  }
-]
 
 const formatSelectedDate = computed(() => {
   if (!selectedDate.value) return ''

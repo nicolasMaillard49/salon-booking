@@ -1,8 +1,5 @@
 <template>
-  <nav 
-    class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-    :class="scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'"
-  >
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-zinc-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 md:h-20">
         
@@ -43,7 +40,7 @@
         </div>
 
         <!-- CTA & Mobile Menu -->
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-4">
           <!-- Desktop CTA -->
           <NuxtLink 
             to="/"
@@ -53,62 +50,61 @@
             Prendre RDV
           </NuxtLink>
 
-          <!-- Mobile Menu Button -->
+          <!-- Mobile Menu Button - Always Visible -->
           <button 
             @click="isMenuOpen = !isMenuOpen"
-            class="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-zinc-100 hover:bg-zinc-200 transition-colors"
+            class="md:hidden w-10 h-10 flex items-center justify-center rounded-full hover:bg-zinc-100 transition-colors"
           >
             <UIcon 
               :name="isMenuOpen ? 'i-heroicons-x-mark' : 'i-heroicons-bars-3'" 
-              class="w-5 h-5 text-zinc-700"
+              class="w-5 h-5 text-white"
             />
           </button>
         </div>
       </div>
 
-      <!-- Mobile Menu -->
+      <!-- Mobile Menu - Always Visible Below Header -->
       <Transition
         enter-active-class="transition-all duration-200 ease-out"
-        enter-from-class="opacity-0 -translate-y-2"
-        enter-to-class="opacity-100 translate-y-0"
+        enter-from-class="opacity-0 max-h-0"
+        enter-to-class="opacity-100 max-h-96"
         leave-active-class="transition-all duration-150 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 -translate-y-2"
+        leave-from-class="opacity-100 max-h-96"
+        leave-to-class="opacity-0 max-h-0"
       >
-        <div v-if="isMenuOpen" class="md:hidden py-4 border-t border-zinc-100">
-          <div class="flex flex-col gap-2">
+        <div v-if="isMenuOpen" class="md:hidden bg-zinc-900 border-t border-zinc-800">
+          <div class="flex flex-col gap-0">
             <NuxtLink 
               to="/" 
               @click="isMenuOpen = false"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-zinc-800 transition-colors border-b border-zinc-800"
             >
-              <UIcon name="i-heroicons-calendar" class="w-5 h-5 text-red-600" />
-              <span class="font-medium text-zinc-900">Réserver</span>
+              <UIcon name="i-heroicons-calendar" class="w-5 h-5 text-red-500" />
+              <span class="font-medium text-white">Réserver</span>
             </NuxtLink>
             <NuxtLink 
               to="/realisations" 
               @click="isMenuOpen = false"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-zinc-800 transition-colors border-b border-zinc-800"
             >
-              <UIcon name="i-heroicons-photo" class="w-5 h-5 text-zinc-400" />
-              <span class="font-medium text-zinc-900">Réalisations</span>
+              <UIcon name="i-heroicons-photo" class="w-5 h-5 text-white" />
+              <span class="font-medium text-white">Réalisations</span>
             </NuxtLink>
             <NuxtLink 
               to="/mes-rdv" 
               @click="isMenuOpen = false"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-zinc-800 transition-colors border-b border-zinc-800"
             >
-              <UIcon name="i-heroicons-calendar-days" class="w-5 h-5 text-zinc-400" />
-              <span class="font-medium text-zinc-900">Mes RDV</span>
+              <UIcon name="i-heroicons-calendar-days" class="w-5 h-5 text-white" />
+              <span class="font-medium text-white">Mes RDV</span>
             </NuxtLink>
-            <div class="h-px bg-zinc-100 my-2" />
             <NuxtLink 
               to="/admin" 
               @click="isMenuOpen = false"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-zinc-50 transition-colors"
+              class="flex items-center gap-3 px-4 py-4 hover:bg-zinc-800 transition-colors"
             >
-              <UIcon name="i-heroicons-lock-closed" class="w-5 h-5 text-zinc-400" />
-              <span class="font-medium text-zinc-600">Admin</span>
+              <UIcon name="i-heroicons-lock-closed" class="w-5 h-5 text-zinc-500" />
+              <span class="font-medium text-zinc-400">Admin</span>
             </NuxtLink>
           </div>
         </div>
@@ -119,14 +115,6 @@
 
 <script setup>
 const isMenuOpen = ref(false)
-const scrolled = ref(false)
-
-// Handle scroll
-onMounted(() => {
-  window.addEventListener('scroll', () => {
-    scrolled.value = window.scrollY > 20
-  })
-})
 
 // Close menu on route change
 watch(() => useRoute().path, () => {
