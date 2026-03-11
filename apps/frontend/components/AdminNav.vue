@@ -16,27 +16,27 @@
       <div class="hidden md:flex items-center gap-1">
         <NuxtLink 
           to="/admin" 
-          class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+          class="px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
           active-class="bg-zinc-100 text-zinc-900"
         >
-          <UIcon name="i-heroicons-calendar" class="w-4 h-4 inline mr-2" />
-          Rendez-vous
+          <UIcon name="i-heroicons-calendar" class="w-4 h-4 inline mr-1.5" />
+          <span class="hidden md:inline">Rendez-vous</span>
         </NuxtLink>
         <NuxtLink 
           to="/admin/indisponibilite" 
-          class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
-          active-class="bg-red-100 text-red-900"
+          class="px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+          active-class="bg-zinc-100 text-zinc-900"
         >
-          <UIcon name="i-heroicons-calendar-x-mark" class="w-4 h-4 inline mr-2" />
-          Indisponibilité
+          <UIcon name="i-heroicons-calendar-x-mark" class="w-4 h-4 inline mr-1.5" />
+          <span class="hidden md:inline">Indispo</span>
         </NuxtLink>
         <NuxtLink 
           to="/admin/photos" 
-          class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+          class="px-3 py-2 rounded-lg text-xs md:text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
           active-class="bg-zinc-100 text-zinc-900"
         >
-          <UIcon name="i-heroicons-photo" class="w-4 h-4 inline mr-2" />
-          Photos
+          <UIcon name="i-heroicons-photo" class="w-4 h-4 inline mr-1.5" />
+          <span class="hidden md:inline">Photos</span>
         </NuxtLink>
       </div>
 

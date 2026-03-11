@@ -11,20 +11,20 @@
           <h1 class="text-3xl font-bold text-zinc-900">Gestion des rendez-vous</h1>
           <p class="text-zinc-600 mt-1">Tous les RDV de la semaine</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
           <NuxtLink 
             to="/admin/indisponibilite"
-            class="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            class="flex items-center gap-2 px-4 py-2 bg-zinc-100 text-zinc-700 rounded-lg hover:bg-zinc-200 transition-colors text-sm"
           >
-            <UIcon name="i-heroicons-calendar-x-mark" class="w-5 h-5" />
-            Indisponibilité
+            <UIcon name="i-heroicons-calendar-x-mark" class="w-4 h-4" />
+            Indispo
           </NuxtLink>
           <NuxtLink 
             to="/admin/photos"
-            class="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors"
+            class="flex items-center gap-2 px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 transition-colors text-sm"
           >
-            <UIcon name="i-heroicons-photo" class="w-5 h-5" />
-            Gérer les photos
+            <UIcon name="i-heroicons-photo" class="w-4 h-4" />
+            Photos
           </NuxtLink>
         </div>
       </div>
