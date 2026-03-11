@@ -9,7 +9,7 @@
       </div>
 
       <!-- Content -->
-      <div class="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
+      <div class="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <!-- Badge -->
         <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
           <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
