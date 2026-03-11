@@ -2,12 +2,12 @@
   <div>
     <!-- Floating Menu Button & Logo -->
     <div class="fixed top-6 left-6 right-6 z-50 flex items-center justify-between">
-      <!-- Logo on White Sphere -->
+      <!-- Logo without background -->
       <NuxtLink 
         to="/" 
-        class="group relative w-16 h-16 rounded-full bg-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+        class="group relative w-16 h-16 rounded-full hover:opacity-80 transition-all flex items-center justify-center"
       >
-        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-16 h-16 object-contain" />
+        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-16 h-16 object-contain brightness-0 invert" />
       </NuxtLink>
 
       <!-- Floating Menu Burger Button -->
