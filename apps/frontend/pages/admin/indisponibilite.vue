@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="flex items-center gap-4">
           <button 
-            @click="navigateTo('/admin')"
+            @click="router.push('/admin')"
             class="p-2 hover:bg-zinc-100 rounded-lg transition-colors"
           >
             <svg class="w-5 h-5 text-zinc-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,6 +155,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { format } from 'date-fns'
 
 const router = useRouter()
 const currentDate = ref(new Date())
@@ -178,7 +179,7 @@ const calendarDays = computed(() => {
     const date = new Date(startDate)
     date.setDate(date.getDate() + i)
     
-    const dateStr = date.toISOString().split('T')[0]
+    const dateStr = format(date, 'yyyy-MM-dd')
     const isCurrentMonth = date.getMonth() === month
     
     days.push({
@@ -208,7 +209,7 @@ function toggleBlockedDate(date: string) {
 }
 
 function blockToday() {
-  const today = new Date().toISOString().split('T')[0]
+  const today = format(new Date(), 'yyyy-MM-dd')
   if (!blockedDates.value.includes(today)) {
     blockedDates.value.push(today)
     localStorage.setItem('blockedDates', JSON.stringify(blockedDates.value))
@@ -221,7 +222,7 @@ function blockAll() {
   for (let i = 0; i < 7; i++) {
     const date = new Date(today)
     date.setDate(date.getDate() + i)
-    const dateStr = date.toISOString().split('T')[0]
+    const dateStr = format(date, 'yyyy-MM-dd')
     if (!blockedDates.value.includes(dateStr)) {
       week.push(dateStr)
     }
@@ -243,7 +244,5 @@ function nextMonth() {
   currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1)
 }
 
-function navigateTo(path: string) {
-  router.push(path)
-}
+
 </script>
