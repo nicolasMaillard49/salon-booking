@@ -5,9 +5,9 @@
       <!-- Logo on White Sphere -->
       <NuxtLink 
         to="/" 
-        class="group relative w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+        class="group relative w-16 h-16 rounded-full bg-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
       >
-        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-12 h-12 object-contain" />
+        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-16 h-16 object-contain" />
       </NuxtLink>
 
       <!-- Floating Menu Burger Button -->
