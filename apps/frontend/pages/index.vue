@@ -18,7 +18,7 @@
 
         <!-- Title with Logo -->
         <div class="mb-6">
-          <img src="/faveicon.png" alt="Nm.D.Barber" class="w-24 h-24 mx-auto mb-4 object-contain" />
+          <img src="/faveicon.png" alt="Nm.D.Barber" class="w-24 h-24 mx-auto mb-4 object-contain brightness-0 invert" />
           <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight">
             <span class="block">Nm.D.</span>
             <span class="block text-red-500">Barber</span>
