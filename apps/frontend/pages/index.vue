@@ -59,10 +59,16 @@
         </div>
       </div>
 
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce">
-        <UIcon name="i-heroicons-chevron-down" class="w-6 h-6 text-white/50" />
-      </div>
+      <!-- Scroll indicator - Clickable -->
+      <button 
+        @click="scrollToBooking"
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 animate-bounce cursor-pointer hover:text-white/80 transition-colors"
+        aria-label="Scroll to booking"
+      >
+        <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </button>
     </section>
 
     <!-- Booking Section -->
