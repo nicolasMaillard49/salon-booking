@@ -2,14 +2,12 @@
   <div>
     <!-- Floating Menu Button & Logo -->
     <div class="fixed top-6 left-6 right-6 z-50 flex items-center justify-between">
-      <!-- Logo with Brand Text -->
+      <!-- Logo on White Sphere -->
       <NuxtLink 
         to="/" 
-        class="group relative rounded-2xl bg-white shadow-lg hover:shadow-xl transition-all flex flex-col items-center justify-center px-4 py-3"
+        class="group relative w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
       >
-        <span class="text-xs font-bold text-zinc-900 tracking-wider">nm D.</span>
-        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-8 h-8 object-contain my-1" />
-        <span class="text-xs font-semibold text-zinc-700">barber</span>
+        <img src="/faveicon.png" alt="Nm.D.Barber" class="w-12 h-12 object-contain" />
       </NuxtLink>
 
       <!-- Floating Menu Burger Button -->

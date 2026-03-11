@@ -16,11 +16,14 @@
           <span class="text-white/90 text-sm font-medium">Ouvert aujourd'hui · 10h-19h</span>
         </div>
 
-        <!-- Title -->
-        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
-          <span class="block">Nm.D.</span>
-          <span class="block text-red-500">Barber</span>
-        </h1>
+        <!-- Title with Logo -->
+        <div class="mb-6">
+          <img src="/faveicon.png" alt="Nm.D.Barber" class="w-24 h-24 mx-auto mb-4 object-contain" />
+          <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white tracking-tight">
+            <span class="block">Nm.D.</span>
+            <span class="block text-red-500">Barber</span>
+          </h1>
+        </div>
 
         <!-- Subtitle -->
         <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto font-light">
