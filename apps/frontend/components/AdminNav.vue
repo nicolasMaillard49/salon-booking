@@ -23,6 +23,14 @@
           Rendez-vous
         </NuxtLink>
         <NuxtLink 
+          to="/admin/indisponibilite" 
+          class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+          active-class="bg-red-100 text-red-900"
+        >
+          <UIcon name="i-heroicons-calendar-x-mark" class="w-4 h-4 inline mr-2" />
+          Indisponibilité
+        </NuxtLink>
+        <NuxtLink 
           to="/admin/photos" 
           class="px-4 py-2 rounded-lg text-sm font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
           active-class="bg-zinc-100 text-zinc-900"
