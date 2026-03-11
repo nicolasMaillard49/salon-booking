@@ -170,9 +170,10 @@ const calendarDays = computed(() => {
   const firstDay = new Date(year, month, 1)
   const lastDay = new Date(year, month + 1, 0)
   
-  // Padding for days from previous month
+  // Padding for days from previous month (Monday-Sunday format)
   const startDate = new Date(firstDay)
-  startDate.setDate(startDate.getDate() - firstDay.getDay())
+  const offset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1
+  startDate.setDate(startDate.getDate() - offset)
   
   const days = []
   for (let i = 0; i < 42; i++) {
