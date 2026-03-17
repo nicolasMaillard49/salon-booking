@@ -6,11 +6,7 @@ settings:
 
 importers:
 
-  .:
-    devDependencies:
-      prisma:
-        specifier: ^5.22.0
-        version: 5.22.0
+  .: {}
 
   apps/backend:
     dependencies:
