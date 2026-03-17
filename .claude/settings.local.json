@@ -8,7 +8,15 @@
       "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && pnpm approve-builds 2>&1)",
       "Bash(export PATH=\"$PATH:/c/Users/user1/AppData/Roaming/npm\" && cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && pnpm db:generate 2>&1)",
       "Bash(cd \"D:/Users/user1/Documents/DEV/NMDBArder\" && git init && git config user.email \"nicolasMaillard49@users.noreply.github.com\" && git config user.name \"nicolasMaillard49\" 2>&1)",
-      "Bash(head:*)"
+      "Bash(head:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:gABNMdWgzxIywKVYlBipxWBiduoqzYJz@caboose.proxy.rlwy.net:20231/railway\" npx prisma migrate resolve --rolled-back 20260316150402_add_blocked_dates)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:gABNMdWgzxIywKVYlBipxWBiduoqzYJz@caboose.proxy.rlwy.net:20231/railway\" pnpm --filter prisma exec prisma migrate resolve --rolled-back 20260316150402_add_blocked_dates)",
+      "Bash(pnpm install:*)",
+      "Bash(DATABASE_URL=\"postgresql://postgres:gABNMdWgzxIywKVYlBipxWBiduoqzYJz@caboose.proxy.rlwy.net:20231/railway\" pnpm exec prisma migrate resolve --rolled-back 20260316150402_add_blocked_dates --schema packages/prisma/schema.prisma)",
+      "Bash(pnpm add:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(export DATABASE_URL=\"postgresql://postgres:gABNMdWgzxIywKVYlBipxWBiduoqzYJz@caboose.proxy.rlwy.net:20231/railway\")"
     ]
   }
 }
