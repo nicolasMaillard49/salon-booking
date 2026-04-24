@@ -240,18 +240,6 @@ const currentDate = ref(new Date())
 const availability = ref<DayAvailability[]>([])
 const loading = ref(false)
 const expandedDay = ref<string | null>(null)
-const blockedDates = ref<string[]>([])
-
-// Load blocked dates from localStorage on mount
-const loadBlockedDates = () => {
-  if (typeof window !== 'undefined') {
-    try {
-      blockedDates.value = JSON.parse(localStorage.getItem('blockedDates') || '[]')
-    } catch {
-      blockedDates.value = []
-    }
-  }
-}
 
 const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 
@@ -287,7 +275,7 @@ const daysInMonth = computed<DayCell[]>(() => {
     const slots = avail?.slots ?? []
     const availableCount = slots.filter(s => s.available).length
     const isAllBenj = slots.length > 0 && slots.every(s => s.isBenjThursday)
-    const isBlocked = blockedDates.value.includes(dateStr)
+    const isBlocked = avail?.isBlocked ?? false
 
     return {
       date: dateStr,
@@ -396,7 +384,6 @@ function nextMonth() {
 }
 
 onMounted(() => {
-  loadBlockedDates()
   loadAvailability()
 })
 </script>

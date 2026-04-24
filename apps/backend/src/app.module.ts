@@ -7,6 +7,7 @@ import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { PhotosModule } from './photos/photos.module';
+import { UnavailabilitiesModule } from './unavailabilities/unavailabilities.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PhotosModule } from './photos/photos.module';
     AuthModule,
     AppointmentsModule,
     PhotosModule,
+    UnavailabilitiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

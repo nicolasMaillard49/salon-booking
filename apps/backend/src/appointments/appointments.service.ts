@@ -2,6 +2,7 @@ import { Injectable, ConflictException, NotFoundException, BadRequestException }
 import { Prisma } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { UnavailabilitiesService } from '../unavailabilities/unavailabilities.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
@@ -12,6 +13,7 @@ export class AppointmentsService {
   constructor(
     private prisma: PrismaService,
     private mail: MailService,
+    private unavailabilities: UnavailabilitiesService,
   ) {}
 
   async getAvailability(month?: string, start?: string, end?: string) {
@@ -30,13 +32,20 @@ export class AppointmentsService {
       to = endOfMonth(new Date());
     }
 
-    const booked = await this.prisma.appointment.findMany({
-      where: {
-        date: { gte: from, lte: to },
-        status: { not: 'CANCELLED' },
-      },
-      select: { date: true, timeSlot: true, firstName: true, lastName: true, status: true },
-    });
+    const [booked, unavailable] = await Promise.all([
+      this.prisma.appointment.findMany({
+        where: {
+          date: { gte: from, lte: to },
+          status: { not: 'CANCELLED' },
+        },
+        select: { date: true, timeSlot: true, firstName: true, lastName: true, status: true },
+      }),
+      this.unavailabilities.findInRange(from, to),
+    ]);
+
+    const unavailableMap = new Map<string, string | null>(
+      unavailable.map(u => [format(u.date, 'yyyy-MM-dd'), u.reason ?? null]),
+    );
 
     const allDays = eachDayOfInterval({ start: from, end: to });
     return allDays.map(day => {
@@ -45,6 +54,8 @@ export class AppointmentsService {
       const isWeekend = isWeekendDay(dayOfWeek);
       const isThursday = dayOfWeek === 4;
       const daySlots = getSlotsForDay(dayOfWeek);
+      const isBlocked = unavailableMap.has(dateStr);
+      const blockedReason: string | null = isBlocked ? unavailableMap.get(dateStr) ?? null : null;
 
       const slots = daySlots.map(time => {
         // Thursday noon = Benj Brichet
@@ -55,6 +66,16 @@ export class AppointmentsService {
             bookedBy: 'Benj Brichet',
             isPending: false,
             isBenjThursday: true,
+          };
+        }
+
+        if (isBlocked) {
+          return {
+            time,
+            available: false,
+            bookedBy: undefined,
+            isPending: false,
+            isBenjThursday: false,
           };
         }
 
@@ -71,7 +92,7 @@ export class AppointmentsService {
         };
       });
 
-      return { date: dateStr, isWeekend, slots };
+      return { date: dateStr, isWeekend, isBlocked, blockedReason, slots };
     });
   }
 
@@ -88,6 +109,11 @@ export class AppointmentsService {
     // Thursday noon = Benj
     if (dayOfWeek === 4 && dto.timeSlot === '12:00') {
       throw new ConflictException('Le jeudi midi est réservé pour Benj Brichet.');
+    }
+
+    const blocked = await this.prisma.unavailability.findUnique({ where: { date } });
+    if (blocked) {
+      throw new ConflictException('Ce jour est indisponible.');
     }
 
     const existing = await this.prisma.appointment.findFirst({

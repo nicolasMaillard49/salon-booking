@@ -9,6 +9,8 @@ export interface SlotAvailability {
 export interface DayAvailability {
   date: string
   isWeekend: boolean
+  isBlocked: boolean
+  blockedReason: string | null
   slots: SlotAvailability[]
 }
 
