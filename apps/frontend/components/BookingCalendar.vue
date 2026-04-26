@@ -45,23 +45,22 @@
         <!-- Semaine : cellule scindée midi/soir -->
         <button
           v-else-if="!day.isWeekend"
-          :disabled="day.isPast || day.availableCount === 0 || day.isBlocked"
+          :disabled="day.isPast || day.availableCount === 0"
           class="h-20 rounded-lg overflow-hidden flex flex-col transition-all duration-150 cursor-pointer"
           :class="[
-            day.isBlocked ? 'opacity-50 cursor-not-allowed' : day.isPast || day.availableCount === 0 ? 'cursor-not-allowed' : 'hover:scale-110 hover:z-10',
-            expandedDay === day.date && !day.isBlocked ? 'ring-2 ring-indigo-500 ring-offset-1' : '',
+            day.isPast || day.availableCount === 0 ? 'cursor-not-allowed' : 'hover:scale-110 hover:z-10',
+            expandedDay === day.date ? 'ring-2 ring-indigo-500 ring-offset-1' : '',
           ]"
-          @click="!day.isPast && day.availableCount > 0 && !day.isBlocked && toggleDay(day.date)"
+          @click="!day.isPast && day.availableCount > 0 && toggleDay(day.date)"
         >
           <!-- Numéro du jour (bandeau) -->
-          <div class="w-full px-1.5 pt-1 pb-0.5 flex items-center justify-between" :class="day.isBlocked ? 'bg-red-600/80' : 'bg-indigo-800/80'">
+          <div class="w-full px-1.5 pt-1 pb-0.5 flex items-center justify-between bg-indigo-800/80">
             <span
               class="text-[10px] font-mono font-bold leading-none text-white"
               :class="day.isToday ? 'text-red-300' : ''"
             >
               {{ day.dayNumber }}
             </span>
-            <span v-if="day.isBlocked" class="text-[7px] font-mono font-bold text-white/90">INDISPO</span>
           </div>
           <!-- Midi (50%) -->
           <div
@@ -90,10 +89,10 @@
         <!-- Week-end : cellule unique avec compteur -->
         <button
           v-else
-          :disabled="day.isPast || day.availableCount === 0 || day.isBlocked"
+          :disabled="day.isPast || day.availableCount === 0"
           class="h-20 rounded-lg transition-all duration-150 relative flex flex-col items-start justify-start p-1.5 overflow-hidden"
-          :class="[dayCellClass(day), expandedDay === day.date && !day.isBlocked ? 'ring-2 ring-indigo-500 ring-offset-1' : day.isBlocked ? 'ring-1 ring-red-300' : '']"
-          @click="!day.isPast && day.availableCount > 0 && !day.isBlocked && toggleDay(day.date)"
+          :class="[dayCellClass(day), expandedDay === day.date ? 'ring-2 ring-indigo-500 ring-offset-1' : '']"
+          @click="!day.isPast && day.availableCount > 0 && toggleDay(day.date)"
         >
           <span
             class="text-[11px] font-mono font-bold leading-none"
@@ -103,13 +102,7 @@
           </span>
           <div class="absolute bottom-1 left-1 right-1 flex items-center justify-center">
             <span
-              v-if="day.isBlocked"
-              class="text-[9px] font-mono font-bold text-red-600"
-            >
-              Indispo
-            </span>
-            <span
-              v-else-if="day.availableCount > 0"
+              v-if="day.availableCount > 0"
               class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-white/20"
             >
               {{ day.availableCount }}/{{ day.slots.length }}
@@ -212,10 +205,6 @@
         Benj Brichet
       </span>
       <span class="flex items-center gap-2 text-sm text-zinc-600">
-        <span class="w-4 h-4 rounded bg-red-100 border border-red-300 inline-block" />
-        Indisponible
-      </span>
-      <span class="flex items-center gap-2 text-sm text-zinc-600">
         <span class="w-4 h-4 rounded bg-zinc-400 inline-block" />
         Complet
       </span>
@@ -240,18 +229,6 @@ const currentDate = ref(new Date())
 const availability = ref<DayAvailability[]>([])
 const loading = ref(false)
 const expandedDay = ref<string | null>(null)
-const blockedDates = ref<string[]>([])
-
-// Load blocked dates from localStorage on mount
-const loadBlockedDates = () => {
-  if (typeof window !== 'undefined') {
-    try {
-      blockedDates.value = JSON.parse(localStorage.getItem('blockedDates') || '[]')
-    } catch {
-      blockedDates.value = []
-    }
-  }
-}
 
 const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D']
 
@@ -271,7 +248,6 @@ interface DayCell {
   isToday: boolean
   isWeekend: boolean
   isAllBenj: boolean
-  isBlocked: boolean
   slots: SlotAvailability[]
   availableCount: number
   midiSlot?: SlotAvailability
@@ -287,7 +263,6 @@ const daysInMonth = computed<DayCell[]>(() => {
     const slots = avail?.slots ?? []
     const availableCount = slots.filter(s => s.available).length
     const isAllBenj = slots.length > 0 && slots.every(s => s.isBenjThursday)
-    const isBlocked = blockedDates.value.includes(dateStr)
 
     return {
       date: dateStr,
@@ -296,7 +271,6 @@ const daysInMonth = computed<DayCell[]>(() => {
       isToday: isToday(day),
       isWeekend: avail?.isWeekend ?? false,
       isAllBenj,
-      isBlocked,
       slots,
       availableCount,
       midiSlot: slots.find(s => s.time === '12:00'),
@@ -318,9 +292,6 @@ const expandedDayIsWeekend = computed(() => expandedDayData.value?.isWeekend ?? 
 const expandedDaySlots = computed(() => expandedDayData.value?.slots ?? [])
 
 function dayCellClass(day: DayCell) {
-  if (day.isBlocked) {
-    return 'bg-red-100 text-red-700 cursor-not-allowed ring-2 ring-red-300 ring-offset-1 shadow-sm shadow-red-200'
-  }
   if (day.isAllBenj) {
     return 'bg-gradient-to-br from-amber-400 to-yellow-500 text-white cursor-not-allowed ring-2 ring-amber-300 ring-offset-1 shadow-sm shadow-amber-200'
   }
@@ -396,7 +367,6 @@ function nextMonth() {
 }
 
 onMounted(() => {
-  loadBlockedDates()
   loadAvailability()
 })
 </script>
