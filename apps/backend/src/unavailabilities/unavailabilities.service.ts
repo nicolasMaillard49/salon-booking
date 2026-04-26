@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
@@ -103,7 +103,7 @@ export class UnavailabilitiesService {
     const to = new Date(dto.to);
 
     if (from > to) {
-      throw new ConflictException('La date de début doit être antérieure ou égale à la date de fin.');
+      throw new BadRequestException('La date de début doit être antérieure ou égale à la date de fin.');
     }
 
     const days = eachDayOfInterval({ start: from, end: to });
