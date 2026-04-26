@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { MailModule } from './mail/mail.module';
 import { AuthModule } from './auth/auth.module';
 import { AppointmentsModule } from './appointments/appointments.module';
+import { UnavailabilitiesModule } from './unavailabilities/unavailabilities.module';
 import { PhotosModule } from './photos/photos.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { PhotosModule } from './photos/photos.module';
     MailModule,
     AuthModule,
     AppointmentsModule,
+    UnavailabilitiesModule,
     PhotosModule,
   ],
   controllers: [AppController],
