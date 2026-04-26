@@ -97,4 +97,90 @@ export class UnavailabilitiesService {
 
     return this.prisma.unavailability.findUnique({ where: { date } });
   }
+
+  async createRange(dto: CreateRangeDto) {
+    const from = new Date(dto.from);
+    const to = new Date(dto.to);
+
+    if (from > to) {
+      throw new ConflictException('La date de début doit être antérieure ou égale à la date de fin.');
+    }
+
+    const days = eachDayOfInterval({ start: from, end: to });
+
+    // 1. Récupérer les indispos déjà existantes dans la plage
+    const existing = await this.prisma.unavailability.findMany({
+      where: { date: { gte: from, lte: to } },
+      select: { date: true },
+    });
+    const existingSet = new Set(existing.map(u => format(u.date, 'yyyy-MM-dd')));
+
+    const datesToCreate = days
+      .map(d => format(d, 'yyyy-MM-dd'))
+      .filter(d => !existingSet.has(d));
+
+    // 2. Lister tous les RDV actifs sur les dates à créer
+    const activeBookings = await this.prisma.appointment.findMany({
+      where: {
+        date: { in: datesToCreate.map(d => new Date(d)) },
+        status: { not: 'CANCELLED' },
+      },
+      select: {
+        id: true,
+        date: true,
+        timeSlot: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+      },
+    });
+
+    // 3. Conflit sans cascade → 409
+    if (activeBookings.length > 0 && !dto.cascade) {
+      throw new ConflictException({
+        message: 'Des RDV actifs existent dans la plage.',
+        conflicts: activeBookings.map(b => ({
+          ...b,
+          date: format(b.date, 'yyyy-MM-dd'),
+        })),
+      });
+    }
+
+    // 4. Transaction : cancel + bulk create
+    await this.prisma.$transaction(async (tx) => {
+      if (activeBookings.length > 0) {
+        await tx.appointment.updateMany({
+          where: {
+            date: { in: datesToCreate.map(d => new Date(d)) },
+            status: { not: 'CANCELLED' },
+          },
+          data: { status: 'CANCELLED' },
+        });
+      }
+      if (datesToCreate.length > 0) {
+        await tx.unavailability.createMany({
+          data: datesToCreate.map(d => ({ date: new Date(d) })),
+          skipDuplicates: true,
+        });
+      }
+    });
+
+    // 5. Mails post-commit
+    for (const b of activeBookings) {
+      const full = await this.prisma.appointment.findUnique({ where: { id: b.id } });
+      if (full) {
+        await this.mail.sendStatusUpdate(full).catch(() => {});
+      }
+    }
+
+    // 6. Retour
+    const created = await this.prisma.unavailability.findMany({
+      where: { date: { in: datesToCreate.map(d => new Date(d)) } },
+      orderBy: { date: 'asc' },
+    });
+    return {
+      created,
+      skipped: Array.from(existingSet),
+    };
+  }
 }

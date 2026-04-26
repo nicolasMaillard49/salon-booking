@@ -20,6 +20,12 @@ export class UnavailabilitiesController {
   }
 
   @UseGuards(AdminGuard)
+  @Post('admin/range')
+  createRange(@Body() dto: CreateRangeDto) {
+    return this.service.createRange(dto);
+  }
+
+  @UseGuards(AdminGuard)
   @Delete('admin/by-date/:date')
   deleteByDate(@Param('date') date: string) {
     return this.service.deleteByDate(date);
