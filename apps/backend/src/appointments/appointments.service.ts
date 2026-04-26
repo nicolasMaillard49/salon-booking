@@ -6,12 +6,14 @@ import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { startOfWeek, endOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, format } from 'date-fns';
 import { getSlotsForDay, isWeekendDay } from './slots.config';
+import { UnavailabilitiesService } from '../unavailabilities/unavailabilities.service';
 
 @Injectable()
 export class AppointmentsService {
   constructor(
     private prisma: PrismaService,
     private mail: MailService,
+    private unavailabilities: UnavailabilitiesService,
   ) {}
 
   async getAvailability(month?: string, start?: string, end?: string) {
@@ -30,13 +32,18 @@ export class AppointmentsService {
       to = endOfMonth(new Date());
     }
 
-    const booked = await this.prisma.appointment.findMany({
-      where: {
-        date: { gte: from, lte: to },
-        status: { not: 'CANCELLED' },
-      },
-      select: { date: true, timeSlot: true, firstName: true, lastName: true, status: true },
-    });
+    const [booked, unavailable] = await Promise.all([
+      this.prisma.appointment.findMany({
+        where: {
+          date: { gte: from, lte: to },
+          status: { not: 'CANCELLED' },
+        },
+        select: { date: true, timeSlot: true, firstName: true, lastName: true, status: true },
+      }),
+      this.unavailabilities.findInRange(from, to),
+    ]);
+
+    const blockedSet = new Set(unavailable.map(u => format(u.date, 'yyyy-MM-dd')));
 
     const allDays = eachDayOfInterval({ start: from, end: to });
     return allDays.map(day => {
@@ -45,6 +52,7 @@ export class AppointmentsService {
       const isWeekend = isWeekendDay(dayOfWeek);
       const isThursday = dayOfWeek === 4;
       const daySlots = getSlotsForDay(dayOfWeek);
+      const isBlocked = blockedSet.has(dateStr);
 
       const slots = daySlots.map(time => {
         // Thursday noon = Benj Brichet
@@ -55,6 +63,17 @@ export class AppointmentsService {
             bookedBy: 'Benj Brichet',
             isPending: false,
             isBenjThursday: true,
+          };
+        }
+
+        // Slot bloqué par admin → ressemble à un slot réservé sans nom
+        if (isBlocked) {
+          return {
+            time,
+            available: false,
+            bookedBy: undefined,
+            isPending: false,
+            isBenjThursday: false,
           };
         }
 
@@ -78,6 +97,13 @@ export class AppointmentsService {
   async create(dto: CreateAppointmentDto) {
     const date = new Date(dto.date);
     const dayOfWeek = date.getDay();
+
+    // NEW: rejeter si date bloquée par admin
+    const blocked = await this.prisma.unavailability.findUnique({ where: { date } });
+    if (blocked) {
+      throw new ConflictException('Cette date est indisponible.');
+    }
+
     const allowedSlots = getSlotsForDay(dayOfWeek);
 
     // Validate slot is allowed for this day
