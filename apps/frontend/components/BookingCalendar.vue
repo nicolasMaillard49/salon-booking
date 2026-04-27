@@ -191,6 +191,10 @@
             </span>
           </button>
         </div>
+
+        <p class="mt-3 text-xs font-semibold text-red-600 text-center">
+          Supplément pour les créneaux du soir
+        </p>
       </div>
     </Transition>
 
